@@ -1,0 +1,488 @@
+# Healthcare Industry Configuration
+# Patient inquiry triage
+
+industry: healthcare
+name: Healthcare Patient Inquiry Triage
+description: Configuration for healthcare patient inquiries, appointment scheduling, and medical concerns
+
+categories:
+  - id: appointment_scheduling
+    name: Appointment Scheduling
+    description: Booking, rescheduling, or canceling appointments
+    keywords:
+      - "appointment"
+      - "schedule"
+      - "book"
+      - "reschedule"
+      - "cancel"
+      - "availability"
+      - "time slot"
+      - "doctor visit"
+    subcategories:
+      - new_appointment
+      - reschedule
+      - cancellation
+      - availability_check
+
+  - id: prescription_refill
+    name: Prescription Refill
+    description: Medication refill requests and pharmacy issues
+    keywords:
+      - "prescription"
+      - "refill"
+      - "medication"
+      - "pharmacy"
+      - "medicine"
+      - "drugs"
+      - "out of pills"
+      - "need more"
+    subcategories:
+      - routine_refill
+      - urgent_refill
+      - pharmacy_transfer
+      - dosage_questions
+
+  - id: billing_inquiry
+    name: Billing Inquiry
+    description: Questions about medical bills, insurance, and payments
+    keywords:
+      - "bill"
+      - "charge"
+      - "insurance"
+      - "payment"
+      - "cost"
+      - "invoice"
+      - "copay"
+      - "deductible"
+      - "coverage"
+    subcategories:
+      - bill_explanation
+      - insurance_coverage
+      - payment_plans
+      - disputed_charges
+
+  - id: test_results
+    name: Test Results
+    description: Inquiries about lab work, imaging, or diagnostic results
+    keywords:
+      - "results"
+      - "lab"
+      - "blood test"
+      - "x-ray"
+      - "MRI"
+      - "scan"
+      - "biopsy"
+      - "diagnosis"
+      - "test"
+    subcategories:
+      - lab_results
+      - imaging_results
+      - result_interpretation
+      - missing_results
+
+  - id: referral_request
+    name: Referral Request
+    description: Requests for specialist referrals or second opinions
+    keywords:
+      - "referral"
+      - "specialist"
+      - "second opinion"
+      - "see another doctor"
+      - "cardiologist"
+      - "dermatologist"
+      - "orthopedic"
+    subcategories:
+      - specialist_referral
+      - second_opinion
+      - referral_status
+      - authorization
+
+  - id: insurance_authorization
+    name: Insurance Authorization
+    description: Prior authorization and insurance approval issues
+    keywords:
+      - "authorization"
+      - "pre-approval"
+      - "insurance approval"
+      - "prior auth"
+      - "coverage denied"
+      - "appeal"
+    subcategories:
+      - prior_auth_request
+      - auth_status
+      - denial_appeal
+      - coverage_verification
+
+  - id: urgent_care
+    name: Urgent Care Needs
+    description: Urgent but non-emergency medical concerns
+    keywords:
+      - "urgent"
+      - "same day"
+      - "sick"
+      - "fever"
+      - "pain"
+      - "need to see doctor"
+      - "walk-in"
+      - "can't wait"
+    subcategories:
+      - acute_illness
+      - injury
+      - urgent_appointment
+      - after_hours
+
+  - id: medication_concerns
+    name: Medication Concerns
+    description: Questions about medications, side effects, or interactions
+    keywords:
+      - "side effect"
+      - "reaction"
+      - "allergic"
+      - "interaction"
+      - "dosage"
+      - "how to take"
+      - "missed dose"
+      - "feeling worse"
+    subcategories:
+      - side_effects
+      - drug_interactions
+      - dosage_questions
+      - adverse_reactions
+
+  - id: patient_safety
+    name: Patient Safety Concerns
+    description: Reports of safety issues or medical errors
+    keywords:
+      - "wrong medication"
+      - "error"
+      - "mistake"
+      - "unsafe"
+      - "infection"
+      - "complication"
+      - "negligence"
+      - "harm"
+    subcategories:
+      - medication_error
+      - procedure_complication
+      - infection_report
+      - safety_concern
+
+  - id: medical_records
+    name: Medical Records
+    description: Requests for medical records or corrections
+    keywords:
+      - "records"
+      - "chart"
+      - "history"
+      - "documentation"
+      - "copy"
+      - "transfer records"
+      - "HIPAA"
+      - "privacy"
+    subcategories:
+      - record_request
+      - record_transfer
+      - correction_request
+      - privacy_concern
+
+  - id: follow_up_care
+    name: Follow-up Care
+    description: Post-visit or post-procedure follow-up inquiries
+    keywords:
+      - "follow up"
+      - "after surgery"
+      - "recovery"
+      - "post-op"
+      - "healing"
+      - "wound care"
+      - "check up"
+    subcategories:
+      - post_procedure
+      - wound_care
+      - recovery_questions
+      - follow_up_appointment
+
+  - id: telehealth
+    name: Telehealth Services
+    description: Virtual visit setup and technical issues
+    keywords:
+      - "video visit"
+      - "telehealth"
+      - "virtual"
+      - "online appointment"
+      - "can't connect"
+      - "zoom"
+      - "portal"
+    subcategories:
+      - virtual_visit_setup
+      - technical_issues
+      - portal_access
+      - video_consultation
+
+  - id: provider_concern
+    name: Provider Concerns
+    description: Complaints or feedback about healthcare providers
+    keywords:
+      - "doctor"
+      - "nurse"
+      - "staff"
+      - "complaint"
+      - "rude"
+      - "unhelpful"
+      - "waiting"
+      - "unprofessional"
+    subcategories:
+      - provider_complaint
+      - staff_behavior
+      - wait_times
+      - communication_issues
+
+  - id: chronic_condition
+    name: Chronic Condition Management
+    description: Ongoing care for chronic health conditions
+    keywords:
+      - "diabetes"
+      - "hypertension"
+      - "asthma"
+      - "chronic"
+      - "ongoing"
+      - "management"
+      - "monitoring"
+      - "condition"
+    subcategories:
+      - condition_monitoring
+      - care_plan
+      - lifestyle_guidance
+      - specialist_coordination
+
+  - id: general_inquiry
+    name: General Inquiry
+    description: General questions and information requests
+    keywords:
+      - "question"
+      - "information"
+      - "how to"
+      - "what is"
+      - "location"
+      - "hours"
+      - "contact"
+    subcategories:
+      - facility_info
+      - service_info
+      - insurance_accepted
+      - general_health
+
+severity_rules:
+  critical:
+    score: 5
+    keywords:
+      - "emergency"
+      - "chest pain"
+      - "can't breathe"
+      - "bleeding heavily"
+      - "overdose"
+      - "suicidal"
+      - "stroke"
+      - "heart attack"
+      - "unconscious"
+    conditions:
+      - "life-threatening condition"
+      - "immediate medical attention needed"
+      - "suicide/self-harm risk"
+
+  high:
+    score: 4
+    keywords:
+      - "urgent"
+      - "severe pain"
+      - "high fever"
+      - "infection"
+      - "reaction"
+      - "can't wait"
+      - "worsening"
+      - "allergic reaction"
+    conditions:
+      - "same-day attention needed"
+      - "potential complication"
+      - "medication adverse effect"
+
+  medium:
+    score: 3
+    keywords:
+      - "concerned"
+      - "worried"
+      - "side effect"
+      - "not improving"
+      - "need appointment"
+      - "follow up"
+    conditions:
+      - "requires clinical attention within week"
+      - "ongoing symptom management"
+
+  low:
+    score: 2
+    keywords:
+      - "routine"
+      - "refill"
+      - "annual"
+      - "check up"
+      - "question about"
+      - "wondering"
+    conditions:
+      - "routine care"
+      - "no immediate clinical need"
+
+  minimal:
+    score: 1
+    keywords:
+      - "thank you"
+      - "feedback"
+      - "compliment"
+      - "general question"
+    conditions:
+      - "positive feedback"
+      - "non-clinical inquiry"
+
+risk_flags:
+  clinical_urgency:
+    - "worsening"
+    - "new symptoms"
+    - "not responding"
+    - "fever over 103"
+    - "severe"
+    - "sudden onset"
+
+  patient_safety:
+    - "wrong medication"
+    - "medication error"
+    - "fell"
+    - "injury at facility"
+    - "infection after"
+    - "complication"
+
+  mental_health:
+    - "depressed"
+    - "anxious"
+    - "suicidal"
+    - "self-harm"
+    - "mental health"
+    - "crisis"
+
+  vulnerable_patient:
+    - "elderly"
+    - "child"
+    - "pregnant"
+    - "immunocompromised"
+    - "cancer patient"
+    - "chronic condition"
+
+  compliance_risk:
+    - "lawyer"
+    - "complaint"
+    - "report"
+    - "malpractice"
+    - "HIPAA"
+    - "violation"
+
+routing_rules:
+  - name: emergency_triage
+    display_name: Emergency Triage
+    conditions:
+      severity_min: 5
+    sla_hours: 0.25
+    escalation_path: emergency_supervisor
+    notes: "Direct to 911 if life-threatening"
+
+  - name: urgent_care_team
+    display_name: Urgent Care Team
+    conditions:
+      categories:
+        - urgent_care
+      severity_min: 4
+    sla_hours: 1
+    escalation_path: urgent_care_physician
+
+  - name: patient_safety_team
+    display_name: Patient Safety Team
+    conditions:
+      categories:
+        - patient_safety
+      risk_flags:
+        - patient_safety
+    sla_hours: 2
+    escalation_path: quality_manager
+
+  - name: mental_health_team
+    display_name: Mental Health Services
+    conditions:
+      risk_flags:
+        - mental_health
+    sla_hours: 1
+    escalation_path: mental_health_coordinator
+
+  - name: clinical_nursing
+    display_name: Clinical Nursing Line
+    conditions:
+      categories:
+        - medication_concerns
+        - follow_up_care
+        - chronic_condition
+    sla_hours: 4
+    escalation_path: nurse_supervisor
+
+  - name: scheduling
+    display_name: Appointment Scheduling
+    conditions:
+      categories:
+        - appointment_scheduling
+        - telehealth
+    sla_hours: 24
+    escalation_path: scheduling_supervisor
+
+  - name: pharmacy
+    display_name: Pharmacy Services
+    conditions:
+      categories:
+        - prescription_refill
+    sla_hours: 8
+    escalation_path: pharmacy_manager
+
+  - name: billing_department
+    display_name: Billing Department
+    conditions:
+      categories:
+        - billing_inquiry
+        - insurance_authorization
+    sla_hours: 48
+    escalation_path: billing_supervisor
+
+  - name: medical_records
+    display_name: Medical Records
+    conditions:
+      categories:
+        - medical_records
+    sla_hours: 72
+    escalation_path: him_manager
+
+  - name: patient_relations
+    display_name: Patient Relations
+    conditions:
+      categories:
+        - provider_concern
+      risk_flags:
+        - compliance_risk
+    sla_hours: 24
+    escalation_path: patient_advocate
+
+  - name: general_intake
+    display_name: General Patient Services
+    conditions:
+      default: true
+    sla_hours: 48
+    escalation_path: patient_services_supervisor
+
+sampling_thresholds:
+  confidence_for_auto_route: 0.85
+  confidence_for_hitl: 0.6
+  high_risk_always_review: true
+  clinical_keywords_require_review: true

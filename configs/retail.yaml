@@ -1,0 +1,466 @@
+# Retail Industry Configuration
+# Customer feedback routing
+
+industry: retail
+name: Retail Customer Feedback Routing
+description: Configuration for retail customer complaints, returns, and feedback
+
+categories:
+  - id: return_refund
+    name: Return/Refund Request
+    description: Requests for product returns, exchanges, or refunds
+    keywords:
+      - "return"
+      - "refund"
+      - "exchange"
+      - "money back"
+      - "send back"
+      - "don't want"
+      - "changed mind"
+      - "not what I ordered"
+    subcategories:
+      - return_request
+      - refund_request
+      - exchange_request
+      - store_credit
+
+  - id: product_defect
+    name: Product Defect
+    description: Complaints about defective or damaged products
+    keywords:
+      - "broken"
+      - "defective"
+      - "not working"
+      - "damaged"
+      - "faulty"
+      - "poor quality"
+      - "arrived broken"
+      - "doesn't work"
+    subcategories:
+      - manufacturing_defect
+      - damaged_in_shipping
+      - not_functioning
+      - quality_issue
+
+  - id: order_tracking
+    name: Order Tracking
+    description: Inquiries about order status and delivery
+    keywords:
+      - "where is"
+      - "tracking"
+      - "status"
+      - "when will"
+      - "delivery"
+      - "order"
+      - "shipped"
+      - "hasn't arrived"
+    subcategories:
+      - order_status
+      - tracking_update
+      - delivery_date
+      - in_transit
+
+  - id: pricing_discrepancy
+    name: Pricing Discrepancy
+    description: Issues with pricing, promotions, or overcharges
+    keywords:
+      - "price"
+      - "overcharged"
+      - "wrong price"
+      - "coupon"
+      - "discount"
+      - "promotion"
+      - "sale price"
+      - "didn't apply"
+    subcategories:
+      - overcharge
+      - promo_not_applied
+      - price_match
+      - coupon_issue
+
+  - id: inventory_inquiry
+    name: Inventory Inquiry
+    description: Questions about product availability and stock
+    keywords:
+      - "in stock"
+      - "available"
+      - "out of stock"
+      - "restock"
+      - "back order"
+      - "when available"
+      - "sold out"
+    subcategories:
+      - stock_check
+      - restock_date
+      - alternative_product
+      - store_availability
+
+  - id: loyalty_program
+    name: Loyalty Program
+    description: Issues with rewards, points, or membership
+    keywords:
+      - "points"
+      - "rewards"
+      - "loyalty"
+      - "member"
+      - "membership"
+      - "benefits"
+      - "points missing"
+      - "reward not applied"
+    subcategories:
+      - missing_points
+      - reward_redemption
+      - membership_issue
+      - tier_status
+
+  - id: store_experience
+    name: Store Experience
+    description: Feedback about in-store shopping experience
+    keywords:
+      - "store"
+      - "staff"
+      - "service"
+      - "waiting"
+      - "rude"
+      - "helpful"
+      - "clean"
+      - "checkout"
+    subcategories:
+      - staff_feedback
+      - store_conditions
+      - wait_times
+      - service_quality
+
+  - id: online_checkout
+    name: Online Checkout Issues
+    description: Problems with online ordering and payment
+    keywords:
+      - "checkout"
+      - "cart"
+      - "payment"
+      - "error"
+      - "can't order"
+      - "website"
+      - "app"
+      - "payment failed"
+    subcategories:
+      - payment_failure
+      - cart_issues
+      - website_error
+      - app_problems
+
+  - id: shipping_issues
+    name: Shipping Issues
+    description: Problems with shipping, delivery, or carriers
+    keywords:
+      - "shipping"
+      - "delivery"
+      - "late"
+      - "wrong address"
+      - "carrier"
+      - "lost"
+      - "delayed"
+      - "never arrived"
+    subcategories:
+      - delayed_delivery
+      - wrong_address
+      - lost_package
+      - shipping_cost
+
+  - id: wrong_item
+    name: Wrong Item Received
+    description: Received incorrect product or quantity
+    keywords:
+      - "wrong item"
+      - "wrong size"
+      - "wrong color"
+      - "not what I ordered"
+      - "different product"
+      - "missing item"
+      - "incomplete"
+    subcategories:
+      - wrong_product
+      - wrong_size_color
+      - missing_items
+      - incomplete_order
+
+  - id: product_inquiry
+    name: Product Inquiry
+    description: Questions about products, specs, or recommendations
+    keywords:
+      - "question about"
+      - "specification"
+      - "compatible"
+      - "recommend"
+      - "difference between"
+      - "which one"
+      - "best for"
+    subcategories:
+      - product_specs
+      - compatibility
+      - recommendations
+      - comparison
+
+  - id: gift_card
+    name: Gift Card Issues
+    description: Problems with gift cards or store credit
+    keywords:
+      - "gift card"
+      - "balance"
+      - "not working"
+      - "lost gift card"
+      - "store credit"
+      - "expired"
+    subcategories:
+      - balance_check
+      - activation
+      - lost_card
+      - redemption_issue
+
+  - id: subscription
+    name: Subscription Issues
+    description: Problems with subscription services
+    keywords:
+      - "subscription"
+      - "cancel"
+      - "recurring"
+      - "auto-renew"
+      - "subscription box"
+      - "charged twice"
+    subcategories:
+      - cancellation
+      - renewal_issue
+      - billing_problem
+      - pause_request
+
+  - id: warranty_claim
+    name: Warranty Claim
+    description: Product warranty and protection plan claims
+    keywords:
+      - "warranty"
+      - "protection plan"
+      - "guarantee"
+      - "coverage"
+      - "claim"
+      - "repair"
+    subcategories:
+      - warranty_check
+      - claim_submission
+      - repair_request
+      - replacement
+
+  - id: general_feedback
+    name: General Feedback
+    description: General comments, suggestions, or compliments
+    keywords:
+      - "feedback"
+      - "suggestion"
+      - "compliment"
+      - "thank you"
+      - "great"
+      - "love"
+      - "improve"
+    subcategories:
+      - compliment
+      - suggestion
+      - complaint
+      - survey_response
+
+severity_rules:
+  critical:
+    score: 5
+    keywords:
+      - "charged multiple"
+      - "fraud"
+      - "stolen"
+      - "lawsuit"
+      - "safety hazard"
+      - "injury"
+      - "allergic reaction"
+      - "media"
+      - "social media post"
+    conditions:
+      - "potential safety issue"
+      - "fraud or unauthorized charges"
+      - "public relations risk"
+
+  high:
+    score: 4
+    keywords:
+      - "urgent"
+      - "gift"
+      - "event"
+      - "wedding"
+      - "birthday"
+      - "never received"
+      - "significant value"
+      - "long time customer"
+    conditions:
+      - "time-sensitive order issue"
+      - "high-value order"
+      - "VIP customer"
+
+  medium:
+    score: 3
+    keywords:
+      - "wrong"
+      - "defective"
+      - "broken"
+      - "late"
+      - "disappointed"
+      - "frustrated"
+    conditions:
+      - "product issue requiring resolution"
+      - "service failure"
+
+  low:
+    score: 2
+    keywords:
+      - "question"
+      - "wondering"
+      - "curious"
+      - "information"
+      - "when"
+      - "how"
+    conditions:
+      - "general inquiry"
+      - "non-urgent request"
+
+  minimal:
+    score: 1
+    keywords:
+      - "great"
+      - "thank you"
+      - "love it"
+      - "amazing"
+      - "suggestion"
+    conditions:
+      - "positive feedback"
+      - "feature suggestion"
+
+risk_flags:
+  safety_concern:
+    - "injury"
+    - "hazard"
+    - "unsafe"
+    - "allergic"
+    - "harmful"
+    - "recall"
+
+  pr_risk:
+    - "social media"
+    - "review"
+    - "viral"
+    - "lawyer"
+    - "lawsuit"
+    - "attorney"
+    - "news"
+
+  vip_customer:
+    - "VIP"
+    - "platinum"
+    - "gold member"
+    - "long time customer"
+    - "loyal"
+    - "influencer"
+
+  fraud_indicator:
+    - "charged twice"
+    - "unauthorized"
+    - "didn't order"
+    - "identity theft"
+    - "scam"
+
+routing_rules:
+  - name: safety_team
+    display_name: Product Safety Team
+    conditions:
+      risk_flags:
+        - safety_concern
+    sla_hours: 1
+    escalation_path: safety_director
+    notes: "Potential product recall evaluation"
+
+  - name: executive_care
+    display_name: Executive Customer Care
+    conditions:
+      risk_flags:
+        - pr_risk
+        - vip_customer
+      severity_min: 4
+    sla_hours: 2
+    escalation_path: vp_customer_experience
+
+  - name: fraud_prevention
+    display_name: Fraud Prevention
+    conditions:
+      risk_flags:
+        - fraud_indicator
+    sla_hours: 4
+    escalation_path: fraud_manager
+
+  - name: returns_center
+    display_name: Returns Processing Center
+    conditions:
+      categories:
+        - return_refund
+        - wrong_item
+        - product_defect
+    sla_hours: 24
+    escalation_path: returns_supervisor
+
+  - name: order_support
+    display_name: Order Support
+    conditions:
+      categories:
+        - order_tracking
+        - shipping_issues
+    sla_hours: 24
+    escalation_path: order_support_lead
+
+  - name: billing_support
+    display_name: Billing Support
+    conditions:
+      categories:
+        - pricing_discrepancy
+        - gift_card
+        - subscription
+    sla_hours: 24
+    escalation_path: billing_supervisor
+
+  - name: loyalty_team
+    display_name: Loyalty Program Team
+    conditions:
+      categories:
+        - loyalty_program
+    sla_hours: 48
+    escalation_path: loyalty_manager
+
+  - name: store_operations
+    display_name: Store Operations
+    conditions:
+      categories:
+        - store_experience
+    sla_hours: 48
+    escalation_path: regional_manager
+
+  - name: tech_support
+    display_name: Technical Support
+    conditions:
+      categories:
+        - online_checkout
+    sla_hours: 8
+    escalation_path: ecommerce_manager
+
+  - name: customer_service
+    display_name: Customer Service
+    conditions:
+      default: true
+    sla_hours: 48
+    escalation_path: cs_supervisor
+
+sampling_thresholds:
+  confidence_for_auto_route: 0.85
+  confidence_for_hitl: 0.6
+  high_risk_always_review: true
+  vip_always_escalate: true

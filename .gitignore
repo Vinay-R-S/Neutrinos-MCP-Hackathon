@@ -7,9 +7,5 @@ Markdown files
 # Node dependencies
 node_modules
 
-# Project MCP server
-configs
+# Project files
 mcp_server
-.env.example
-requirements.txt
-README.md

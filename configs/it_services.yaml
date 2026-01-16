@@ -1,0 +1,467 @@
+# IT Services Industry Configuration
+# Support ticket classification
+
+industry: it_services
+name: IT Services Support Ticket Classification
+description: Configuration for IT support tickets, incident management, and service requests
+
+categories:
+  - id: system_outage
+    name: System Outage
+    description: Complete system unavailability or major service disruption
+    keywords:
+      - "down"
+      - "outage"
+      - "not working"
+      - "unavailable"
+      - "can't access"
+      - "offline"
+      - "crashed"
+      - "entire system"
+      - "all users affected"
+    subcategories:
+      - application_outage
+      - server_outage
+      - network_outage
+      - database_outage
+
+  - id: password_reset
+    name: Password Reset
+    description: Password and credential management issues
+    keywords:
+      - "password"
+      - "reset"
+      - "forgot"
+      - "expired"
+      - "locked out"
+      - "can't login"
+      - "credentials"
+      - "unlock"
+    subcategories:
+      - password_forgot
+      - password_expired
+      - account_locked
+      - mfa_reset
+
+  - id: software_installation
+    name: Software Installation
+    description: Software installation, updates, or licensing issues
+    keywords:
+      - "install"
+      - "software"
+      - "application"
+      - "license"
+      - "update"
+      - "upgrade"
+      - "new program"
+      - "download"
+    subcategories:
+      - new_installation
+      - license_request
+      - update_issues
+      - compatibility
+
+  - id: hardware_failure
+    name: Hardware Failure
+    description: Physical hardware malfunctions or replacements
+    keywords:
+      - "broken"
+      - "hardware"
+      - "laptop"
+      - "computer"
+      - "monitor"
+      - "keyboard"
+      - "mouse"
+      - "printer"
+      - "not turning on"
+    subcategories:
+      - laptop_desktop
+      - monitor_display
+      - peripheral_devices
+      - mobile_devices
+
+  - id: network_connectivity
+    name: Network Connectivity
+    description: Network, internet, and connectivity issues
+    keywords:
+      - "internet"
+      - "network"
+      - "wifi"
+      - "connection"
+      - "slow"
+      - "disconnecting"
+      - "no internet"
+      - "can't connect"
+    subcategories:
+      - wifi_issues
+      - wired_network
+      - slow_connection
+      - intermittent
+
+  - id: vpn_issues
+    name: VPN Issues
+    description: Virtual Private Network connection problems
+    keywords:
+      - "VPN"
+      - "remote access"
+      - "connect remotely"
+      - "work from home"
+      - "tunnel"
+      - "VPN disconnecting"
+    subcategories:
+      - connection_failed
+      - slow_vpn
+      - vpn_setup
+      - authentication
+
+  - id: email_problems
+    name: Email Problems
+    description: Email client and messaging issues
+    keywords:
+      - "email"
+      - "outlook"
+      - "can't send"
+      - "not receiving"
+      - "mail"
+      - "inbox"
+      - "calendar"
+      - "meeting invite"
+    subcategories:
+      - send_receive
+      - calendar_issues
+      - attachment_problems
+      - mailbox_full
+
+  - id: security_incident
+    name: Security Incident
+    description: Security threats, malware, or suspicious activity
+    keywords:
+      - "virus"
+      - "malware"
+      - "phishing"
+      - "suspicious"
+      - "hacked"
+      - "ransomware"
+      - "security"
+      - "threat"
+      - "breach"
+    subcategories:
+      - malware_infection
+      - phishing_report
+      - suspicious_activity
+      - data_breach
+
+  - id: access_request
+    name: Access Request
+    description: Requests for system access or permissions
+    keywords:
+      - "access"
+      - "permission"
+      - "role"
+      - "folder"
+      - "sharepoint"
+      - "can't view"
+      - "need access"
+      - "unauthorized"
+    subcategories:
+      - new_access
+      - permission_change
+      - access_removal
+      - shared_drive
+
+  - id: printer_issues
+    name: Printer Issues
+    description: Printing problems and printer setup
+    keywords:
+      - "printer"
+      - "print"
+      - "can't print"
+      - "paper jam"
+      - "toner"
+      - "queue"
+      - "scanner"
+    subcategories:
+      - print_failure
+      - paper_jam
+      - driver_issues
+      - setup_request
+
+  - id: application_error
+    name: Application Error
+    description: Application-specific errors or bugs
+    keywords:
+      - "error"
+      - "crash"
+      - "freeze"
+      - "not responding"
+      - "bug"
+      - "glitch"
+      - "application"
+      - "program error"
+    subcategories:
+      - crashes
+      - errors
+      - performance
+      - functionality
+
+  - id: data_recovery
+    name: Data Recovery
+    description: Requests for file or data recovery
+    keywords:
+      - "deleted"
+      - "lost files"
+      - "recover"
+      - "backup"
+      - "restore"
+      - "missing data"
+      - "accidentally deleted"
+    subcategories:
+      - file_recovery
+      - email_recovery
+      - backup_restore
+      - data_corruption
+
+  - id: new_employee_setup
+    name: New Employee Setup
+    description: Onboarding and IT setup for new employees
+    keywords:
+      - "new employee"
+      - "onboarding"
+      - "new hire"
+      - "setup"
+      - "new laptop"
+      - "first day"
+      - "account creation"
+    subcategories:
+      - account_creation
+      - equipment_setup
+      - access_provisioning
+      - training
+
+  - id: equipment_request
+    name: Equipment Request
+    description: Requests for new IT equipment or peripherals
+    keywords:
+      - "request"
+      - "new equipment"
+      - "laptop"
+      - "monitor"
+      - "headset"
+      - "docking station"
+      - "need new"
+    subcategories:
+      - laptop_request
+      - monitor_request
+      - peripheral_request
+      - upgrade_request
+
+  - id: general_inquiry
+    name: General Inquiry
+    description: General IT questions and how-to requests
+    keywords:
+      - "how to"
+      - "question"
+      - "help"
+      - "training"
+      - "guide"
+      - "tutorial"
+      - "what is"
+    subcategories:
+      - how_to
+      - training_request
+      - documentation
+      - best_practices
+
+severity_rules:
+  critical:
+    score: 5
+    keywords:
+      - "all users"
+      - "entire company"
+      - "production down"
+      - "security breach"
+      - "ransomware"
+      - "data loss"
+      - "critical system"
+      - "executive"
+    conditions:
+      - "major system outage affecting multiple users"
+      - "security incident in progress"
+      - "critical business system unavailable"
+
+  high:
+    score: 4
+    keywords:
+      - "urgent"
+      - "can't work"
+      - "deadline"
+      - "presentation"
+      - "client meeting"
+      - "VIP"
+      - "manager"
+      - "production"
+    conditions:
+      - "individual cannot perform job functions"
+      - "time-sensitive business impact"
+      - "VIP user affected"
+
+  medium:
+    score: 3
+    keywords:
+      - "slow"
+      - "intermittent"
+      - "workaround"
+      - "sometimes"
+      - "annoying"
+      - "issue"
+    conditions:
+      - "degraded service but workaround exists"
+      - "non-critical system affected"
+
+  low:
+    score: 2
+    keywords:
+      - "when you can"
+      - "no rush"
+      - "minor"
+      - "small issue"
+      - "question"
+      - "curious"
+    conditions:
+      - "minimal business impact"
+      - "general inquiry"
+
+  minimal:
+    score: 1
+    keywords:
+      - "suggestion"
+      - "enhancement"
+      - "feature request"
+      - "nice to have"
+    conditions:
+      - "enhancement request"
+      - "future consideration"
+
+risk_flags:
+  security_threat:
+    - "ransomware"
+    - "malware"
+    - "breach"
+    - "hacked"
+    - "phishing"
+    - "suspicious"
+    - "compromised"
+
+  data_risk:
+    - "data loss"
+    - "deleted"
+    - "corrupted"
+    - "confidential"
+    - "sensitive"
+    - "PII"
+    - "customer data"
+
+  business_critical:
+    - "production"
+    - "customer-facing"
+    - "revenue"
+    - "deadline"
+    - "contract"
+    - "audit"
+
+  vip_user:
+    - "executive"
+    - "CEO"
+    - "VP"
+    - "director"
+    - "C-suite"
+    - "board member"
+
+routing_rules:
+  - name: security_operations
+    display_name: Security Operations Center
+    conditions:
+      categories:
+        - security_incident
+      risk_flags:
+        - security_threat
+    sla_hours: 0.5
+    escalation_path: ciso
+    notes: "Immediate containment required"
+
+  - name: major_incident_team
+    display_name: Major Incident Management
+    conditions:
+      categories:
+        - system_outage
+      severity_min: 5
+    sla_hours: 0.5
+    escalation_path: incident_commander
+
+  - name: network_team
+    display_name: Network Operations
+    conditions:
+      categories:
+        - network_connectivity
+        - vpn_issues
+    sla_hours: 4
+    escalation_path: network_manager
+
+  - name: desktop_support
+    display_name: Desktop Support
+    conditions:
+      categories:
+        - hardware_failure
+        - software_installation
+        - printer_issues
+    sla_hours: 8
+    escalation_path: desktop_lead
+
+  - name: service_desk_tier2
+    display_name: Service Desk Tier 2
+    conditions:
+      categories:
+        - application_error
+        - email_problems
+      severity_min: 3
+    sla_hours: 8
+    escalation_path: service_desk_manager
+
+  - name: identity_management
+    display_name: Identity & Access Management
+    conditions:
+      categories:
+        - password_reset
+        - access_request
+        - new_employee_setup
+    sla_hours: 4
+    escalation_path: iam_lead
+
+  - name: data_services
+    display_name: Data Services
+    conditions:
+      categories:
+        - data_recovery
+    sla_hours: 24
+    escalation_path: data_manager
+
+  - name: procurement
+    display_name: IT Procurement
+    conditions:
+      categories:
+        - equipment_request
+    sla_hours: 72
+    escalation_path: procurement_manager
+
+  - name: service_desk_tier1
+    display_name: Service Desk Tier 1
+    conditions:
+      default: true
+    sla_hours: 24
+    escalation_path: service_desk_tier2
+
+sampling_thresholds:
+  confidence_for_auto_route: 0.85
+  confidence_for_hitl: 0.6
+  high_risk_always_review: true
+  vip_always_escalate: true

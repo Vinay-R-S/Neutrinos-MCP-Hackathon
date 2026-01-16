@@ -1,0 +1,477 @@
+# Logistics Industry Configuration
+# Shipment exception handling
+
+industry: logistics
+name: Logistics Shipment Exception Handling
+description: Configuration for logistics shipment issues, delivery problems, and freight claims
+
+categories:
+  - id: delayed_delivery
+    name: Delayed Delivery
+    description: Shipments that are late or behind schedule
+    keywords:
+      - "late"
+      - "delayed"
+      - "behind schedule"
+      - "not on time"
+      - "overdue"
+      - "expected yesterday"
+      - "still waiting"
+      - "promised date"
+    subcategories:
+      - transit_delay
+      - processing_delay
+      - carrier_delay
+      - weather_delay
+
+  - id: damaged_package
+    name: Damaged Package
+    description: Packages that arrived damaged or compromised
+    keywords:
+      - "damaged"
+      - "broken"
+      - "crushed"
+      - "wet"
+      - "torn"
+      - "opened"
+      - "contents damaged"
+      - "box crushed"
+    subcategories:
+      - packaging_damage
+      - content_damage
+      - water_damage
+      - handling_damage
+
+  - id: lost_shipment
+    name: Lost Shipment
+    description: Packages that cannot be located or delivered
+    keywords:
+      - "lost"
+      - "missing"
+      - "can't find"
+      - "never arrived"
+      - "disappeared"
+      - "no update"
+      - "stuck"
+      - "where is"
+    subcategories:
+      - in_transit_loss
+      - delivery_exception
+      - misrouted
+      - stolen
+
+  - id: address_correction
+    name: Address Correction
+    description: Requests to update or correct delivery address
+    keywords:
+      - "wrong address"
+      - "change address"
+      - "update delivery"
+      - "different location"
+      - "new address"
+      - "moved"
+      - "incorrect address"
+    subcategories:
+      - address_update
+      - redirect_request
+      - hold_at_location
+      - alternate_address
+
+  - id: delivery_reschedule
+    name: Delivery Rescheduling
+    description: Requests to reschedule delivery time
+    keywords:
+      - "reschedule"
+      - "different day"
+      - "not home"
+      - "delivery window"
+      - "can't accept"
+      - "vacation"
+      - "hold"
+    subcategories:
+      - reschedule_request
+      - hold_request
+      - delivery_window
+      - vacation_hold
+
+  - id: customs_hold
+    name: Customs Hold
+    description: International shipments held at customs
+    keywords:
+      - "customs"
+      - "import"
+      - "clearance"
+      - "duties"
+      - "taxes"
+      - "held at border"
+      - "documentation"
+      - "international"
+    subcategories:
+      - customs_clearance
+      - documentation_issue
+      - duties_payment
+      - import_restriction
+
+  - id: tracking_issues
+    name: Tracking Issues
+    description: Problems with shipment tracking information
+    keywords:
+      - "tracking"
+      - "no updates"
+      - "wrong status"
+      - "delivered but"
+      - "tracking not working"
+      - "says delivered"
+      - "tracking number"
+    subcategories:
+      - no_tracking_update
+      - wrong_status
+      - tracking_not_found
+      - delivered_not_received
+
+  - id: return_pickup
+    name: Return Pickup
+    description: Requests for return shipment pickup
+    keywords:
+      - "return"
+      - "pickup"
+      - "send back"
+      - "return label"
+      - "schedule pickup"
+      - "drop off"
+      - "return shipment"
+    subcategories:
+      - pickup_request
+      - return_label
+      - drop_off_location
+      - return_status
+
+  - id: freight_claim
+    name: Freight Claim
+    description: Claims for damaged or lost freight
+    keywords:
+      - "claim"
+      - "insurance"
+      - "compensation"
+      - "reimbursement"
+      - "freight damage"
+      - "file claim"
+      - "cargo"
+    subcategories:
+      - damage_claim
+      - loss_claim
+      - shortage_claim
+      - claim_status
+
+  - id: delivery_attempt
+    name: Delivery Attempt Issues
+    description: Problems with delivery attempts
+    keywords:
+      - "missed delivery"
+      - "attempted"
+      - "left notice"
+      - "not delivered"
+      - "couldn't deliver"
+      - "access issue"
+      - "gate code"
+    subcategories:
+      - missed_delivery
+      - access_problem
+      - signature_required
+      - business_closed
+
+  - id: package_dimensions
+    name: Package/Weight Discrepancy
+    description: Issues with package size or weight charges
+    keywords:
+      - "weight"
+      - "dimensions"
+      - "overcharged"
+      - "dimensional weight"
+      - "actual weight"
+      - "size"
+      - "measurement"
+    subcategories:
+      - weight_dispute
+      - dimension_dispute
+      - billing_adjustment
+      - remeasurement
+
+  - id: special_handling
+    name: Special Handling Request
+    description: Requests for special handling or services
+    keywords:
+      - "fragile"
+      - "hazmat"
+      - "temperature"
+      - "signature"
+      - "adult signature"
+      - "perishable"
+      - "special handling"
+    subcategories:
+      - fragile_handling
+      - temperature_controlled
+      - signature_service
+      - hazardous_materials
+
+  - id: pickup_issues
+    name: Pickup Issues
+    description: Problems with scheduled pickups
+    keywords:
+      - "pickup"
+      - "didn't come"
+      - "missed pickup"
+      - "driver"
+      - "schedule pickup"
+      - "late pickup"
+    subcategories:
+      - missed_pickup
+      - reschedule_pickup
+      - driver_issue
+      - pickup_location
+
+  - id: billing_dispute
+    name: Billing Dispute
+    description: Disputes about shipping charges or invoices
+    keywords:
+      - "charge"
+      - "invoice"
+      - "bill"
+      - "overcharged"
+      - "incorrect amount"
+      - "dispute"
+      - "refund"
+    subcategories:
+      - overcharge
+      - incorrect_invoice
+      - refund_request
+      - rate_dispute
+
+  - id: general_inquiry
+    name: General Inquiry
+    description: General shipping questions and information
+    keywords:
+      - "question"
+      - "how to"
+      - "rates"
+      - "service"
+      - "coverage"
+      - "transit time"
+      - "availability"
+    subcategories:
+      - rate_inquiry
+      - service_availability
+      - transit_times
+      - shipping_options
+
+severity_rules:
+  critical:
+    score: 5
+    keywords:
+      - "perishable"
+      - "medical"
+      - "urgent shipment"
+      - "time critical"
+      - "production line"
+      - "assembly halt"
+      - "contract deadline"
+      - "penalty clause"
+    conditions:
+      - "business-critical shipment at risk"
+      - "perishable goods in transit"
+      - "medical/healthcare supplies"
+      - "contractual penalty risk"
+
+  high:
+    score: 4
+    keywords:
+      - "urgent"
+      - "high value"
+      - "important"
+      - "customer deadline"
+      - "event"
+      - "significant"
+      - "lost"
+      - "stolen"
+    conditions:
+      - "high-value shipment affected"
+      - "customer-facing deadline"
+      - "lost/missing shipment"
+
+  medium:
+    score: 3
+    keywords:
+      - "late"
+      - "delayed"
+      - "damaged"
+      - "need update"
+      - "not tracking"
+      - "concerned"
+    conditions:
+      - "delivery delay without business impact"
+      - "minor damage reported"
+      - "tracking discrepancy"
+
+  low:
+    score: 2
+    keywords:
+      - "question"
+      - "inquiry"
+      - "wondering"
+      - "general"
+      - "information"
+      - "quote"
+    conditions:
+      - "general inquiry"
+      - "non-urgent request"
+
+  minimal:
+    score: 1
+    keywords:
+      - "feedback"
+      - "thank you"
+      - "great service"
+      - "suggestion"
+    conditions:
+      - "positive feedback"
+      - "service suggestion"
+
+risk_flags:
+  high_value:
+    - "high value"
+    - "expensive"
+    - "electronics"
+    - "jewelry"
+    - "automotive parts"
+    - "$10000"
+    - "insured"
+
+  perishable:
+    - "perishable"
+    - "food"
+    - "pharmaceutical"
+    - "medical"
+    - "temperature sensitive"
+    - "refrigerated"
+
+  hazmat:
+    - "hazardous"
+    - "dangerous goods"
+    - "chemicals"
+    - "flammable"
+    - "battery"
+    - "lithium"
+
+  contractual:
+    - "contract"
+    - "SLA"
+    - "penalty"
+    - "deadline"
+    - "guarantee"
+    - "committed"
+
+  vip_account:
+    - "enterprise"
+    - "key account"
+    - "strategic"
+    - "VIP"
+    - "premium"
+
+routing_rules:
+  - name: critical_ops
+    display_name: Critical Operations
+    conditions:
+      severity_min: 5
+      risk_flags:
+        - perishable
+        - contractual
+    sla_hours: 0.5
+    escalation_path: operations_director
+    notes: "Immediate intervention required"
+
+  - name: claims_department
+    display_name: Claims Department
+    conditions:
+      categories:
+        - freight_claim
+        - damaged_package
+      risk_flags:
+        - high_value
+    sla_hours: 4
+    escalation_path: claims_manager
+
+  - name: hazmat_team
+    display_name: Hazmat Compliance Team
+    conditions:
+      categories:
+        - special_handling
+      risk_flags:
+        - hazmat
+    sla_hours: 2
+    escalation_path: compliance_officer
+
+  - name: customs_team
+    display_name: Customs & Import Team
+    conditions:
+      categories:
+        - customs_hold
+    sla_hours: 8
+    escalation_path: import_specialist
+
+  - name: tracing_team
+    display_name: Package Tracing Team
+    conditions:
+      categories:
+        - lost_shipment
+        - tracking_issues
+    sla_hours: 4
+    escalation_path: tracing_supervisor
+
+  - name: delivery_coordination
+    display_name: Delivery Coordination
+    conditions:
+      categories:
+        - address_correction
+        - delivery_reschedule
+        - delivery_attempt
+    sla_hours: 8
+    escalation_path: delivery_manager
+
+  - name: pickup_team
+    display_name: Pickup Coordination
+    conditions:
+      categories:
+        - pickup_issues
+        - return_pickup
+    sla_hours: 8
+    escalation_path: pickup_coordinator
+
+  - name: billing_team
+    display_name: Billing Support
+    conditions:
+      categories:
+        - billing_dispute
+        - package_dimensions
+    sla_hours: 48
+    escalation_path: billing_supervisor
+
+  - name: enterprise_support
+    display_name: Enterprise Account Support
+    conditions:
+      risk_flags:
+        - vip_account
+    sla_hours: 2
+    escalation_path: account_manager
+
+  - name: customer_service
+    display_name: Customer Service
+    conditions:
+      default: true
+    sla_hours: 24
+    escalation_path: cs_supervisor
+
+sampling_thresholds:
+  confidence_for_auto_route: 0.85
+  confidence_for_hitl: 0.6
+  high_risk_always_review: true
+  high_value_always_review: true

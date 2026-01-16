@@ -1,0 +1,424 @@
+# Banking Industry Configuration
+# Complaint intake and escalation
+
+industry: banking
+name: Banking Complaints & Escalation
+description: Configuration for banking customer complaints, fraud reports, and account issues
+
+categories:
+  - id: account_access
+    name: Account Access Issues
+    description: Problems logging in, locked accounts, password resets
+    keywords:
+      - "can't login"
+      - "locked out"
+      - "forgot password"
+      - "account blocked"
+      - "access denied"
+      - "authentication failed"
+      - "2fa problem"
+      - "security code"
+    subcategories:
+      - login_issues
+      - account_locked
+      - password_reset
+      - mfa_problems
+
+  - id: unauthorized_transactions
+    name: Unauthorized Transactions
+    description: Fraudulent or unrecognized transactions on accounts
+    keywords:
+      - "fraud"
+      - "stolen"
+      - "unauthorized"
+      - "didn't make"
+      - "suspicious"
+      - "scam"
+      - "hacked"
+      - "identity theft"
+      - "unknown charge"
+      - "didn't authorize"
+    subcategories:
+      - credit_card_fraud
+      - debit_card_fraud
+      - wire_fraud
+      - identity_theft
+
+  - id: fee_disputes
+    name: Fee Disputes
+    description: Complaints about fees, overdrafts, or charges
+    keywords:
+      - "overdraft"
+      - "fee"
+      - "charge"
+      - "penalty"
+      - "interest rate"
+      - "unfair charge"
+      - "hidden fee"
+      - "maintenance fee"
+    subcategories:
+      - overdraft_fees
+      - maintenance_fees
+      - atm_fees
+      - late_payment_fees
+
+  - id: loan_issues
+    name: Loan Processing Issues
+    description: Problems with loan applications, approvals, or payments
+    keywords:
+      - "loan"
+      - "mortgage"
+      - "application denied"
+      - "interest rate"
+      - "payment schedule"
+      - "loan modification"
+      - "refinance"
+      - "approval delayed"
+    subcategories:
+      - application_status
+      - payment_issues
+      - rate_disputes
+      - modification_requests
+
+  - id: wire_transfer
+    name: Wire Transfer Problems
+    description: Issues with domestic or international wire transfers
+    keywords:
+      - "wire transfer"
+      - "money not received"
+      - "transfer failed"
+      - "wrong account"
+      - "international transfer"
+      - "SWIFT"
+      - "delayed transfer"
+    subcategories:
+      - failed_transfers
+      - delayed_transfers
+      - wrong_recipient
+      - international_issues
+
+  - id: atm_issues
+    name: ATM Problems
+    description: ATM malfunctions, card issues, or transaction problems
+    keywords:
+      - "ATM"
+      - "card stuck"
+      - "cash not dispensed"
+      - "wrong amount"
+      - "machine error"
+      - "ATM ate card"
+    subcategories:
+      - card_captured
+      - cash_not_dispensed
+      - wrong_amount
+      - receipt_issues
+
+  - id: mobile_banking
+    name: Mobile Banking Issues
+    description: Problems with mobile app or digital banking services
+    keywords:
+      - "app"
+      - "mobile"
+      - "online banking"
+      - "app crash"
+      - "can't transfer"
+      - "app not working"
+      - "digital banking"
+    subcategories:
+      - app_crashes
+      - feature_not_working
+      - sync_issues
+      - notification_problems
+
+  - id: statement_errors
+    name: Statement Errors
+    description: Incorrect information on account statements
+    keywords:
+      - "statement"
+      - "wrong balance"
+      - "missing transaction"
+      - "incorrect amount"
+      - "statement error"
+    subcategories:
+      - balance_discrepancy
+      - missing_transactions
+      - duplicate_entries
+
+  - id: credit_card_issues
+    name: Credit Card Issues
+    description: Credit card specific problems beyond fraud
+    keywords:
+      - "credit limit"
+      - "card declined"
+      - "points"
+      - "rewards"
+      - "annual fee"
+      - "credit card"
+      - "cashback"
+    subcategories:
+      - limit_issues
+      - rewards_problems
+      - card_declined
+      - replacement_card
+
+  - id: account_closure
+    name: Account Closure Issues
+    description: Problems closing accounts or unexpected closures
+    keywords:
+      - "close account"
+      - "account closed"
+      - "can't close"
+      - "remaining balance"
+      - "closure fee"
+    subcategories:
+      - voluntary_closure
+      - involuntary_closure
+      - final_balance
+
+  - id: check_issues
+    name: Check Processing Issues
+    description: Problems with checks, deposits, or clearance
+    keywords:
+      - "check"
+      - "bounced"
+      - "cleared"
+      - "deposit hold"
+      - "check image"
+      - "mobile deposit"
+    subcategories:
+      - bounced_checks
+      - deposit_holds
+      - lost_checks
+      - processing_delays
+
+  - id: customer_service
+    name: Customer Service Complaints
+    description: Issues with bank staff or service quality
+    keywords:
+      - "rude"
+      - "unhelpful"
+      - "long wait"
+      - "staff"
+      - "branch"
+      - "poor service"
+      - "manager"
+    subcategories:
+      - staff_behavior
+      - wait_times
+      - branch_issues
+      - communication
+
+  - id: account_opening
+    name: Account Opening Problems
+    description: Issues during new account setup
+    keywords:
+      - "open account"
+      - "new account"
+      - "verification"
+      - "documents required"
+      - "application stuck"
+      - "KYC"
+    subcategories:
+      - verification_issues
+      - document_problems
+      - processing_delays
+
+  - id: investment_issues
+    name: Investment Account Issues
+    description: Problems with investment or brokerage accounts
+    keywords:
+      - "investment"
+      - "stocks"
+      - "trade"
+      - "portfolio"
+      - "dividend"
+      - "brokerage"
+    subcategories:
+      - trade_execution
+      - account_access
+      - dividend_issues
+      - statement_errors
+
+  - id: general_inquiry
+    name: General Inquiry
+    description: General questions and information requests
+    keywords:
+      - "question"
+      - "information"
+      - "how to"
+      - "what is"
+      - "help"
+      - "inquiry"
+    subcategories:
+      - product_info
+      - rate_inquiry
+      - branch_info
+      - policy_questions
+
+severity_rules:
+  critical:
+    score: 5
+    keywords:
+      - "fraud"
+      - "stolen"
+      - "hacked"
+      - "identity theft"
+      - "unauthorized"
+      - "security breach"
+      - "all money gone"
+      - "scammed"
+    conditions:
+      - "involves financial loss > $1000"
+      - "security compromise suspected"
+      - "regulatory complaint filed"
+
+  high:
+    score: 4
+    keywords:
+      - "urgent"
+      - "locked out"
+      - "can't access"
+      - "payment due"
+      - "overdraft"
+      - "declined"
+      - "wire failed"
+    conditions:
+      - "time-sensitive matter"
+      - "potential financial loss"
+      - "service disruption"
+
+  medium:
+    score: 3
+    keywords:
+      - "wrong"
+      - "error"
+      - "incorrect"
+      - "delayed"
+      - "waiting"
+      - "issue"
+    conditions:
+      - "requires investigation"
+      - "customer inconvenience"
+
+  low:
+    score: 2
+    keywords:
+      - "question"
+      - "inquiry"
+      - "information"
+      - "wondering"
+      - "curious"
+    conditions:
+      - "general inquiry"
+      - "no immediate action needed"
+
+  minimal:
+    score: 1
+    keywords:
+      - "feedback"
+      - "suggestion"
+      - "compliment"
+    conditions:
+      - "positive feedback"
+      - "feature request"
+
+risk_flags:
+  regulatory:
+    - "CFPB"
+    - "complaint"
+    - "lawyer"
+    - "attorney"
+    - "lawsuit"
+    - "regulatory"
+    - "federal reserve"
+    - "OCC"
+
+  fraud_indicators:
+    - "phishing"
+    - "suspicious email"
+    - "unknown caller"
+    - "social engineering"
+    - "account takeover"
+
+  vulnerable_customer:
+    - "elderly"
+    - "senior"
+    - "disabled"
+    - "language barrier"
+    - "first time"
+
+  escalation_triggers:
+    - "supervisor"
+    - "manager"
+    - "escalate"
+    - "higher authority"
+    - "complaint filed"
+    - "media"
+    - "social media"
+
+routing_rules:
+  - name: fraud_team
+    display_name: Fraud Investigation Team
+    conditions:
+      categories:
+        - unauthorized_transactions
+      severity_min: 4
+    sla_hours: 2
+    escalation_path: fraud_manager
+
+  - name: security_team
+    display_name: Security Operations
+    conditions:
+      categories:
+        - account_access
+      risk_flags:
+        - fraud_indicators
+    sla_hours: 4
+    escalation_path: security_manager
+
+  - name: customer_service_tier2
+    display_name: Customer Service Tier 2
+    conditions:
+      severity_min: 4
+      risk_flags:
+        - escalation_triggers
+    sla_hours: 4
+    escalation_path: customer_service_manager
+
+  - name: loan_department
+    display_name: Loan Processing Department
+    conditions:
+      categories:
+        - loan_issues
+    sla_hours: 24
+    escalation_path: loan_manager
+
+  - name: branch_operations
+    display_name: Branch Operations
+    conditions:
+      categories:
+        - atm_issues
+        - check_issues
+        - customer_service
+    sla_hours: 24
+    escalation_path: branch_manager
+
+  - name: digital_support
+    display_name: Digital Banking Support
+    conditions:
+      categories:
+        - mobile_banking
+    sla_hours: 8
+    escalation_path: digital_team_lead
+
+  - name: customer_service_tier1
+    display_name: Customer Service Tier 1
+    conditions:
+      default: true
+    sla_hours: 48
+    escalation_path: customer_service_tier2
+
+sampling_thresholds:
+  confidence_for_auto_route: 0.85
+  confidence_for_hitl: 0.6
+  high_risk_always_review: true
