@@ -1,0 +1,15 @@
+# Python virtual environment
+.venv
+.env
+__pycache__
+Markdown files
+
+# Node dependencies
+node_modules
+
+# Project MCP server
+configs
+mcp_server
+.env.example
+requirements.txt
+README.md
