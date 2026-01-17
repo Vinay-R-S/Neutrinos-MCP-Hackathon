@@ -1,0 +1,252 @@
+# Education Industry Configuration - Another Non-Standard Format
+# Demonstrates support for education/academic domain with completely different structure
+
+sector: education
+name: Academic Support Ticket System
+description: Configuration for student and faculty support requests
+
+# Using "ticket_categories" - different from both standard and restaurant format
+ticket_categories:
+  - code: enrollment
+    label: Enrollment & Registration
+    about: Issues related to course registration and enrollment
+    tags:
+      - "enroll"
+      - "register"
+      - "course"
+      - "class"
+      - "section"
+      - "waitlist"
+      - "add"
+      - "drop"
+    children:
+      - course_registration
+      - waitlist
+      - add_drop
+
+  - code: grades
+    label: Grade Inquiries
+    about: Questions or disputes about grades
+    tags:
+      - "grade"
+      - "score"
+      - "mark"
+      - "gpa"
+      - "failed"
+      - "pass"
+      - "exam"
+      - "test"
+    children:
+      - grade_dispute
+      - missing_grade
+      - grade_change
+
+  - code: financial_aid
+    label: Financial Aid & Scholarships
+    about: Financial assistance and scholarship queries
+    tags:
+      - "financial aid"
+      - "scholarship"
+      - "loan"
+      - "tuition"
+      - "fee"
+      - "payment"
+      - "refund"
+      - "fafsa"
+    children:
+      - scholarship
+      - loans
+      - tuition_payment
+
+  - code: academic_advising
+    label: Academic Advising
+    about: Academic planning and advising requests
+    tags:
+      - "advisor"
+      - "advising"
+      - "major"
+      - "minor"
+      - "degree"
+      - "graduation"
+      - "requirements"
+    children:
+      - degree_planning
+      - major_change
+      - graduation_check
+
+  - code: housing
+    label: Housing & Residence
+    about: Campus housing related issues
+    tags:
+      - "dorm"
+      - "housing"
+      - "residence"
+      - "roommate"
+      - "move"
+      - "room"
+      - "hall"
+    children:
+      - room_assignment
+      - roommate_issues
+      - maintenance
+
+  - code: it_support
+    label: IT Support
+    about: Technology and system access issues
+    tags:
+      - "password"
+      - "login"
+      - "wifi"
+      - "email"
+      - "blackboard"
+      - "canvas"
+      - "system"
+    children:
+      - account_access
+      - lms_issues
+      - wifi_network
+
+  - code: general_inquiry
+    label: General Questions
+    about: General inquiries and information requests
+    tags:
+      - "question"
+      - "information"
+      - "where"
+      - "how"
+      - "help"
+    children:
+      - campus_info
+      - general_help
+
+# Using "urgency" structure
+urgency:
+  critical:
+    value: 5
+    keywords:
+      - "deadline today"
+      - "graduation"
+      - "cannot graduate"
+      - "financial hold"
+      - "dropped"
+    rules:
+      - "affects graduation"
+      - "immediate financial impact"
+
+  high:
+    value: 4
+    keywords:
+      - "deadline tomorrow"
+      - "urgent"
+      - "exam"
+      - "registration closes"
+    rules:
+      - "time-sensitive academic matter"
+
+  medium:
+    value: 3
+    keywords:
+      - "need help"
+      - "issue"
+      - "problem"
+      - "confused"
+    rules:
+      - "affects academic progress"
+
+  low:
+    value: 2
+    keywords:
+      - "question"
+      - "wondering"
+      - "curious"
+    rules:
+      - "general inquiry"
+
+  minimal:
+    value: 1
+    keywords:
+      - "feedback"
+      - "suggestion"
+      - "thanks"
+    rules:
+      - "non-urgent inquiry"
+
+# Using "indicators" for risk flags
+indicators:
+  academic_standing:
+    - "probation"
+    - "suspension"
+    - "dismissal"
+    - "failing"
+    - "at risk"
+
+  financial_crisis:
+    - "cannot pay"
+    - "financial hardship"
+    - "emergency fund"
+    - "homeless"
+
+  mental_health:
+    - "stressed"
+    - "depressed"
+    - "anxiety"
+    - "counseling"
+    - "overwhelmed"
+
+  accessibility:
+    - "disability"
+    - "accommodation"
+    - "accessible"
+    - "special needs"
+
+# Using "queues" for routing
+queues:
+  - queue: registrar
+    name: Registrar's Office
+    handles:
+      - enrollment
+      - grades
+    target_hours: 24
+    next_level: associate_registrar
+
+  - queue: financial_aid_office
+    name: Financial Aid Office
+    handles:
+      - financial_aid
+    target_hours: 48
+    next_level: financial_aid_director
+
+  - queue: advising_center
+    name: Academic Advising Center
+    handles:
+      - academic_advising
+    target_hours: 48
+    next_level: advising_director
+
+  - queue: housing_office
+    name: Housing Office
+    handles:
+      - housing
+    target_hours: 24
+    next_level: housing_director
+
+  - queue: it_helpdesk
+    name: IT Help Desk
+    handles:
+      - it_support
+    target_hours: 8
+    next_level: it_manager
+
+  - queue: student_services
+    name: Student Services
+    conditions:
+      default: true
+    target_hours: 48
+    next_level: dean_of_students
+
+# Using "thresholds"
+thresholds:
+  confidence_for_auto_route: 0.80
+  confidence_for_hitl: 0.55
+  high_risk_always_review: true
+  academic_deadline_priority: true

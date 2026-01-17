@@ -1,0 +1,232 @@
+# Restaurant Industry Configuration - Non-Standard Format
+# This demonstrates the plug-and-play capability with different YAML structure
+
+domain: restaurant
+name: Restaurant Complaints System
+description: Configuration for restaurant customer complaints and feedback
+
+# Using "complaint_types" instead of "categories"
+complaint_types:
+  - type_id: food_quality
+    type_name: Food Quality Issues
+    desc: Problems with food taste, temperature, or preparation
+    related_words:
+      - "cold"
+      - "stale"
+      - "undercooked"
+      - "raw"
+      - "overcooked"
+      - "burnt"
+      - "tasteless"
+      - "spoiled"
+      - "rotten"
+    subtypes:
+      - temperature
+      - taste
+      - freshness
+      - preparation
+
+  - type_id: service_quality
+    type_name: Service Quality Issues
+    desc: Problems with staff behavior or service speed
+    related_words:
+      - "rude"
+      - "slow"
+      - "ignored"
+      - "waited"
+      - "wrong order"
+      - "forgot"
+      - "mistake"
+      - "attitude"
+    subtypes:
+      - staff_behavior
+      - wait_time
+      - order_accuracy
+
+  - type_id: hygiene
+    type_name: Hygiene & Cleanliness
+    desc: Cleanliness and sanitation concerns
+    related_words:
+      - "dirty"
+      - "unclean"
+      - "bug"
+      - "insect"
+      - "hair"
+      - "contaminated"
+      - "hygiene"
+      - "sanitary"
+    subtypes:
+      - cleanliness
+      - pest_issues
+      - contamination
+
+  - type_id: billing
+    type_name: Billing Disputes
+    desc: Issues with bill amount or charges
+    related_words:
+      - "overcharged"
+      - "wrong bill"
+      - "extra charge"
+      - "didn't order"
+      - "bill"
+      - "receipt"
+    subtypes:
+      - overcharge
+      - missing_items
+      - wrong_items
+
+  - type_id: reservation
+    type_name: Reservation Issues
+    desc: Problems with bookings and reservations
+    related_words:
+      - "reservation"
+      - "booking"
+      - "table"
+      - "cancelled"
+      - "no table"
+      - "overbooking"
+    subtypes:
+      - lost_reservation
+      - overbooking
+      - waitlist
+
+  - type_id: general
+    type_name: General Feedback
+    desc: General comments and suggestions
+    related_words:
+      - "feedback"
+      - "suggestion"
+      - "comment"
+      - "question"
+      - "thank"
+      - "compliment"
+    subtypes:
+      - positive_feedback
+      - suggestions
+
+# Using "priority_levels" instead of "severity_rules"
+priority_levels:
+  urgent:
+    level: 5
+    triggers:
+      - "food poisoning"
+      - "allergic reaction"
+      - "hospital"
+      - "sick"
+      - "emergency"
+      - "ambulance"
+    criteria:
+      - "health emergency"
+      - "legal threat"
+
+  high:
+    level: 4
+    triggers:
+      - "bug"
+      - "insect"
+      - "hair"
+      - "contaminated"
+      - "lawsuit"
+      - "report"
+    criteria:
+      - "health hazard"
+      - "potential media issue"
+
+  medium:
+    level: 3
+    triggers:
+      - "cold food"
+      - "wrong order"
+      - "long wait"
+      - "rude"
+    criteria:
+      - "compensationrequired"
+
+  low:
+    level: 2
+    triggers:
+      - "suggestion"
+      - "minor"
+      - "small issue"
+    criteria:
+      - "no compensation needed"
+
+  minimal:
+    level: 1
+    triggers:
+      - "thank you"
+      - "great"
+      - "excellent"
+    criteria:
+      - "positive feedback"
+
+# Using "warning_signs" instead of "risk_flags"
+warning_signs:
+  health_risk:
+    - "poisoning"
+    - "allergic"
+    - "hospital"
+    - "doctor"
+    - "sick"
+
+  legal_risk:
+    - "lawyer"
+    - "lawsuit"
+    - "sue"
+    - "legal"
+    - "report to health department"
+
+  media_risk:
+    - "social media"
+    - "review"
+    - "yelp"
+    - "google review"
+    - "newspaper"
+    - "news"
+
+# Using "departments" instead of "routing_rules"
+departments:
+  - dept: health_safety_team
+    label: Health & Safety Team
+    handles:
+      - hygiene
+    for_types:
+      - hygiene
+    response_hours: 0.5
+    escalate_to: restaurant_manager
+    info: "Immediate response required for health issues"
+
+  - dept: kitchen_manager
+    label: Kitchen Manager
+    for_types:
+      - food_quality
+    response_hours: 2
+    escalate_to: head_chef
+
+  - dept: floor_manager
+    label: Floor Manager
+    for_types:
+      - service_quality
+      - reservation
+    response_hours: 4
+    escalate_to: general_manager
+
+  - dept: billing_team
+    label: Billing & Accounts
+    for_types:
+      - billing
+    response_hours: 24
+    escalate_to: finance_manager
+
+  - dept: general_support
+    label: General Support
+    conditions:
+      default: true
+    response_hours: 48
+    escalate_to: floor_manager
+
+# Using "settings" instead of "sampling_thresholds"
+settings:
+  auto_route: 0.85
+  human_review: 0.6
+  always_review_high_risk: true
