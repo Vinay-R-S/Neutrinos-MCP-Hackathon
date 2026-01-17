@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  mcp-server:
+    build: .
+    container_name: intake-triage-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - LOG_LEVEL=INFO
+      - CONFIG_PATH=/configs
+    volumes:
+      - ./configs:/configs

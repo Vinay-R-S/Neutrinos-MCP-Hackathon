@@ -33,8 +33,13 @@ class ConfigLoader:
                            using GenericYAMLAdapter. Defaults to True for plug-and-play.
         """
         if config_dir is None:
-            # Default to configs directory relative to this file
-            self.config_dir = Path(__file__).parent.parent / "configs"
+            # Check environment variable first
+            env_config_path = os.getenv("CONFIG_PATH")
+            if env_config_path:
+                self.config_dir = Path(env_config_path)
+            else:
+                # Default to configs directory relative to this file
+                self.config_dir = Path(__file__).parent.parent / "configs"
         else:
             self.config_dir = Path(config_dir)
 

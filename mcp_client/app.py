@@ -64,6 +64,9 @@ templates_dir = _client_dir / "templates"
 templates_dir.mkdir(exist_ok=True)
 templates = Jinja2Templates(directory=str(templates_dir))
 
+@app.get("/")
+def home():
+    return {"status": "OK", "message": "Server running"}
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):

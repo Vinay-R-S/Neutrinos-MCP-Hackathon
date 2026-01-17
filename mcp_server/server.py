@@ -38,11 +38,11 @@ except ImportError:
     raise
 
 # Import our modules
-from .config_loader import get_config_loader, load_config
-from .tools.classify import classify_intake, get_category_info
-from .tools.severity import score_severity, check_risk_flags, get_severity_thresholds
-from .tools.routing import route_case, get_routing_rules, get_available_teams
-from .resources.queues import (
+from mcp_server.config_loader import get_config_loader, load_config
+from mcp_server.tools.classify import classify_intake, get_category_info
+from mcp_server.tools.severity import score_severity, check_risk_flags, get_severity_thresholds
+from mcp_server.tools.routing import route_case, get_routing_rules, get_available_teams
+from mcp_server.resources.queues import (
     get_intake_queues,
     get_category_taxonomy,
     get_routing_config,
@@ -53,8 +53,7 @@ from .resources.queues import (
 
 # Initialize the MCP server
 mcp = FastMCP(
-    name="intake-triage-server",
-    version="1.0.0"
+    name="intake-triage-server"
 )
 
 

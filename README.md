@@ -115,6 +115,88 @@ The application will be available at: `http://localhost:8000`
 - `mcp_server/`: Core logic, MCP tools, and LLM clients.
 - `configs/`: YAML configuration files for different industries.
 
+## Running Intake Triage MCP Server with Docker
+This guide instructions on how to build and run the Intelligent Intake and Triage MCP Server in a Docker container.
+
+## Prerequisites
+
+- Docker
+- Docker Compose (optional, for easier management)
+- API Keys for Groq and/or Gemini
+
+## Quick Start with Docker Compose
+
+1.  **Environment Setup**: Ensure your `.env` file exists in the project root containing your API keys.
+
+    ```bash
+    cp mcp_server/.env.example .env
+    # Edit .env and add GROQ_API_KEY and GEMINI_API_KEY
+    ```
+
+2.  **Build and Run**:
+
+    ```bash
+    docker-compose up --build
+    ```
+
+    > **Note:** If `docker-compose` is not found, try the modern command:
+    >
+    > ```bash
+    > docker compose up --build
+    > ```
+
+    The MCP Server will start and listen on port **8000** for SSE connections.
+
+## Manual Docker Build & Run
+
+### 1. Build the Image
+
+```bash
+docker build -t intake-triage-server .
+```
+
+### 2. Run the Container
+
+You can run the container with environment variables passed directly or via an env file.
+
+```bash
+docker run -p 8000:8000 \
+  --env GROQ_API_KEY=your_key \
+  --env GEMINI_API_KEY=your_key \
+  intake-triage-server
+```
+
+or
+
+```bash
+docker run -p 8000:8000 --env-file .env intake-triage-server
+```
+
+## Configuration via Volume Mounts
+
+To modify industry configurations without rebuilding the image, mount your local `configs/` directory to `/configs` in the container.
+
+**Docker Run:**
+
+```bash
+docker run -p 8000:8000 \
+  --env CONFIG_PATH=/configs \
+  -v $(pwd)/configs:/configs \
+  intake-triage-server
+```
+
+**Docker Compose:**
+The provided `docker-compose.yml` already mounts `./configs` to `/configs` and sets `CONFIG_PATH`.
+
+## Health Check
+
+The container includes a health check running every 30 seconds. You can manually verify status:
+
+```bash
+curl http://localhost:8000/
+```
+
+
 ## License
 
 MIT License
