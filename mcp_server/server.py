@@ -10,11 +10,18 @@ Core Pattern: MCP resources (intake data) → LLM calls (classification/scoring)
 
 import os
 import logging
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from mcp_server/.env
+_server_dir = Path(__file__).parent
+_env_path = _server_dir / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
+else:
+    # Fallback to root .env if server-specific doesn't exist
+    load_dotenv()
 
 # Configure logging
 logging.basicConfig(

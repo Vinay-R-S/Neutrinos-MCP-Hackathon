@@ -6,11 +6,18 @@ Provides integration with Groq API for text classification and severity analysis
 import os
 import json
 import logging
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from mcp_server/.env
+_server_dir = Path(__file__).parent.parent  # Go up from llm/ to mcp_server/
+_env_path = _server_dir / ".env"
+if _env_path.exists():
+    load_dotenv(_env_path)
+else:
+    # Fallback to root .env if server-specific doesn't exist
+    load_dotenv()
 
 logger = logging.getLogger(__name__)
 

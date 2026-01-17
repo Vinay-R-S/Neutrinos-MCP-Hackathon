@@ -1,0 +1,20 @@
+# MCP Server Requirements
+# Install with: pip install -r requirements.txt
+
+# Core MCP framework
+fastmcp>=2.0.0
+
+# LLM Integration
+groq>=0.4.0
+
+# Configuration handling
+pyyaml>=6.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# File content extraction
+python-docx>=1.1.0
+pypdf>=4.0.0
+Pillow>=10.0.0
+python-magic-bin>=0.4.14
+openpyxl>=3.1.0

@@ -1,0 +1,17 @@
+# MCP Client Requirements
+# Install with: pip install -r requirements.txt
+
+# Core MCP client
+mcp>=1.0.0
+
+# LLM Integration (if client needs direct LLM access)
+groq>=0.4.0
+
+# Configuration handling
+python-dotenv>=1.0.0
+
+# HTTP client for API calls (if needed)
+httpx>=0.27.0
+
+# Optional: Rich console output
+rich>=13.0.0
