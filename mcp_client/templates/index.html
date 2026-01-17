@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Intake & Triage</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Intake Triage</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-item active">Submit Issue</a>
+                <a href="/about" class="nav-item">About</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="theme-toggle" title="Toggle dark mode">
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" style="display:none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <p>Powered by MCP</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <h2>Submit Your Issue</h2>
+                <p class="subtitle">Describe your issue or upload files for intelligent classification and routing.</p>
+
+                <form action="/submit" method="post" enctype="multipart/form-data" id="intake-form">
+
+                    <!-- Industry Selection -->
+                    <div class="form-group">
+                        <label for="industry">Industry (Optional)</label>
+                        <select name="industry" id="industry">
+                            <option value="">Auto-detect</option>
+                            {% for ind in industries %}
+                            <option value="{{ ind }}">{% if ind == 'it_services' %}IT Services{% else %}{{
+                                ind.replace('_', ' ')|title }}{% endif %}</option>
+                            {% endfor %}
+                        </select>
+                        <small>Leave as auto-detect to let the system identify the domain.</small>
+                    </div>
+
+                    <!-- LLM Provider Selection -->
+                    <div class="form-group">
+                        <label for="llm_provider">AI Provider</label>
+                        <select name="llm_provider" id="llm_provider">
+                            <option value="groq">Groq (Llama 3.3)</option>
+                            <option value="gemini">Gemini (Google)</option>
+                        </select>
+                        <small>Choose the AI model to process your issue.</small>
+                    </div>
+
+                    <!-- Issue Text -->
+                    <div class="form-group">
+                        <label for="issue_text">Issue Description</label>
+                        <textarea name="issue_text" id="issue_text" rows="6"
+                            placeholder="Describe your issue, complaint, or inquiry here..."></textarea>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="form-group">
+                        <label>Upload Files (Optional)</label>
+                        <div class="file-upload-area" id="drop-zone">
+                            <input type="file" name="files" id="files" multiple
+                                accept=".pdf,.docx,.doc,.txt,.xlsx,.xls,.png,.jpg,.jpeg,.gif,.webp,.bmp">
+                            <p>Drag & drop files here or click to browse</p>
+                            <small>Supported: PDF, DOCX, TXT, XLSX, PNG, JPG, GIF, WebP</small>
+                        </div>
+                        <div id="file-list" class="file-list"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary" id="submit-btn">
+                            Process Issue
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+
+</html>

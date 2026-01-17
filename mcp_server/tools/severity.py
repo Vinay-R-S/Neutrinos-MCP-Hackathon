@@ -8,49 +8,33 @@ import logging
 
 from ..config_loader import get_config_loader
 from ..llm.groq_client import get_groq_client
+from ..llm.gemini_client import get_gemini_client
 
 logger = logging.getLogger(__name__)
+
+
+def get_llm_client(provider: str = "groq"):
+    """Get the requested LLM client."""
+    if provider.lower() == "gemini":
+        return get_gemini_client()
+    return get_groq_client()
 
 
 def score_severity(
     text: str,
     category_id: Optional[str] = None,
-    industry: str = "banking"
+    industry: str = "banking",
+    llm_provider: str = "groq"
 ) -> Dict[str, Any]:
     """
     Score the severity of an intake request.
-
-    This tool analyzes intake text to determine:
-    1. Severity score (1-5 scale)
-    2. Priority level (low, normal, high, urgent)
-    3. Risk flags present in the text
-    4. Whether escalation is recommended
-
-    Args:
-        text: The intake text to analyze
-        category_id: Optional category ID for context
-        industry: The industry to use for severity rules
-
-    Returns:
-        Dict containing:
-            - severity_score: 1-5 scale (1=minimal, 5=critical)
-            - severity_level: Text level (minimal, low, medium, high, critical)
-            - priority: Priority classification
-            - risk_flags_found: List of risk flag types detected
-            - urgency_indicators: Specific urgent phrases found
-            - escalation_recommended: Whether to escalate
-            - sla_multiplier: SLA adjustment factor based on severity
-            - explanation: Explanation of severity assessment
-
-    Raises:
-        ValueError: If text is empty or industry is invalid
     """
     if not text or not text.strip():
         raise ValueError("Intake text cannot be empty")
 
     text = text.strip()
     config_loader = get_config_loader()
-    groq_client = get_groq_client()
+    llm_client = get_llm_client(llm_provider)
 
     # Load configuration
     try:
@@ -65,7 +49,7 @@ def score_severity(
         thresholds = config_loader.get_sampling_thresholds(industry)
 
     # Analyze severity
-    analysis = groq_client.analyze_severity(
+    analysis = llm_client.analyze_severity(
         text, 
         category_id or "unknown", 
         severity_rules, 

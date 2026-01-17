@@ -12,18 +12,10 @@ The project consists of two main components:
 ## Prerequisites
 
 - Python 3.11 or higher
-- Git
 
 ## Installation
 
-### 1. Clone the Repository
-
-```bash
-git clone <repository-url>
-cd Neutrinos-MCP-Hackathon
-```
-
-### 2. Set Up Virtual Environment
+### 1. Set Up Virtual Environment
 
 Create and activate a virtual environment to isolate dependencies:
 
@@ -41,7 +33,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+### 2. Install Dependencies
 
 Install the required packages for both the client and server:
 
