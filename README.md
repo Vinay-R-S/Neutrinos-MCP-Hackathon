@@ -1,202 +1,313 @@
 # Intelligent Intake and Triage System
 
-An intelligent intake classification and routing system built on the Model Context Protocol (MCP). This system uses Large Language Models (LLMs) to analyze incoming requests, assess severity, and route them to the appropriate teams based on configurable rules.
+This project is an Intelligent Intake Classification and Routing System built using the Model Context Protocol (MCP).
 
-## System Architecture
+This README provides two ways to run the project:
 
-The project consists of two main components:
+1. UI Mode (Browser-based)
+2. Terminal Mode (curl-based JSON)
 
-- **MCP Server**: The backend logic that provides tools for classification, severity scoring, and routing. It supports multiple LLM providers (Groq and Google Gemini).
-- **Web Client**: A user-friendly web interface for submitting issues and viewing analysis results.
+Docker is required for the MCP backend server.
 
-## Prerequisites
+---
 
-- Python 3.11 or higher
-- Git
+## 1) Requirements
 
-## Installation
+- Python 3.11+
+- Docker
 
-### 1. Clone the Repository
+---
 
-```bash
-git clone <repository-url>
-cd Neutrinos-MCP-Hackathon
-```
+## 2) Environment Setup
 
-### 2. Set Up Virtual Environment
+### 2.1 Create `.env`
 
-Create and activate a virtual environment to isolate dependencies:
-
-**Windows:**
+From project root:
 
 ```bash
-python -m venv .venv
-.\.venv\Scripts\activate
+cp mcp_server/.env.example .env
 ```
 
-**Linux/macOS:**
+Edit `.env`:
+
+```ini
+GROQ_API_KEY=your_groq_api_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+
+DEFAULT_INDUSTRY=banking
+LOG_LEVEL=INFO
+```
+
+---
+
+## 3) Backend (MCP Server) - Docker
+
+### 3.1 Build Backend Image
+
+```bash
+docker build -t intake-triage-server .
+```
+
+### 3.2 Run Backend Container
+
+```bash
+docker run --rm -p 8000:8000 --env-file .env intake-triage-server
+```
+
+### 3.3 Verify Backend
+
+```bash
+curl -i http://127.0.0.1:8000/sse
+```
+
+---
+
+## 4) Frontend (UI Client) - Browser Mode
+
+The UI client is a FastAPI server that serves HTML/CSS/JS.
+
+### 4.1 Create Virtual Environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
-
-Install the required packages for both the client and server:
+### 4.2 Install Dependencies
 
 ```bash
 pip install -r mcp_client/requirements.txt
 pip install -r mcp_server/requirements.txt
 ```
 
-## Configuration
+### 4.3 Run UI Client
 
-### 1. Environment Variables
-
-Create a `.env` file in the `mcp_server` directory to store your API keys. You can use the provided `.env.example` as a template.
+Run the UI on port 8001:
 
 ```bash
-cp mcp_server/.env.example mcp_server/.env
+python -m uvicorn mcp_client.app:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-Edit `mcp_server/.env` and add your API keys:
+### 4.4 Open UI in Browser
 
-```ini
-# Groq API Key (Required for Groq provider)
-GROQ_API_KEY=your_groq_api_key_here
+- Local machine: open
+  - `http://127.0.0.1:8001/`
 
-# Google Gemini API Key (Required for Gemini provider)
-GEMINI_API_KEY=your_gemini_api_key_here
+- HAWCC / cloud editor:
+  - Forward/expose port `8001`
+  - Open the generated public URL in your browser
 
-# Optional Configuration
-DEFAULT_INDUSTRY=banking
-LOG_LEVEL=INFO
+### 4.4 Open UI in Browser
+
+- Local machine: open
+  - `http://127.0.0.1:8001/`
+
+- HAWCC / cloud editor:
+  - Forward/expose port `8001`
+  - Open the generated public URL in your browser
+
+---
+
+## 5) Windows Setup (No Docker)
+
+If you are on Windows and want to run without Docker, use the provided batch scripts.
+
+### 5.1 One-Time Setup
+
+Run `setup_windows.bat` to create the virtual environment and install all dependencies.
+
+```cmd
+setup_windows.bat
 ```
 
-### 2. Obtaining API Keys
+_Note: You still need to edit the `.env` file with your API keys after running setup._
 
-- **Groq API Key**: Sign up at [Groq Cloud Console](https://console.groq.com/) and create a new API key.
-- **Google Gemini API Key**: Visit [Google AI Studio](https://aistudio.google.com/) and generate an API key.
+### 5.2 Running the Project
 
-### 3. Customizing Industry Rules
+**Terminal 1 (Backend):**
 
-The system uses YAML configuration files to define valid categories, severity triggers, and routing rules for each industry. These are located in the `configs/` directory.
+```cmd
+run_backend.bat
+```
 
-To add a new industry or modify an existing one:
+**Terminal 2 (Client):**
 
-1.  Create or edit a YAML file in the `configs/` directory (e.g., `configs/insurance.yaml`).
-2.  Follow the structure of existing files (`banking.yaml`, `healthcare.yaml`) to define:
-    - **Taxonomy**: Categories and subcategories.
-    - **Severity Rules**: Keywords that modify severity scores.
-    - **Risk Flags**: High-risk terms that trigger alerts.
-    - **Routing Map**: Rules for assigning teams based on category and severity.
+```cmd
+run_client.bat
+```
 
-## Running the Application
+The client will automatically open `http://127.0.0.1:8001/` in your browser.
 
-To start the web application, run the following command from the project root:
+---
+
+## 5) UI Mode Usage (Browser)
+
+1. Open: `http://127.0.0.1:8001/`
+2. Enter Issue Description
+3. Select Industry (optional)
+4. Select AI Provider (Groq or Gemini)
+5. Upload files (optional)
+6. Click `Process Issue`
+
+The result page will show:
+
+- classification
+- severity
+- routing decision
+- SLA and escalation path
+
+---
+
+## 6) Terminal Mode Usage (JSON)
+
+Use the JSON endpoint:
+
+- `POST /api/submit`
+
+### 6.1 Submit Text Only
 
 ```bash
-python -m uvicorn mcp_client.app:app --reload --port 8000
+curl -s -X POST http://127.0.0.1:8001/api/submit \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  --data-urlencode "issue_text=My banking app got hacked and money was withdrawn" \
+  --data-urlencode "industry=banking" \
+  --data-urlencode "llm_provider=groq" | python -m json.tool
 ```
 
-The application will be available at: `http://localhost:8000`
+### 6.2 Upload Image
 
-## Usage Guide
+```bash
+curl -s -X POST http://127.0.0.1:8001/api/submit \
+  -F "issue_text=Please analyze this screenshot." \
+  -F "industry=banking" \
+  -F "llm_provider=groq" \
+  -F "files=@test_data/Bill.webp" | python -m json.tool
+```
 
-1.  **Submit Issue**: Navigate to the home page. Enter the issue description and select the industry (optional).
-2.  **Select AI Provider**: Choose your preferred AI provider (Groq or Gemini) from the dropdown.
-3.  **Upload Files**: Optionally upload relevant documents or images.
-4.  **View Results**: The system will display the classification, severity score, identified risk flags, and the assigned team.
+### 6.3 Upload PDF
 
-## Project Structure
+```bash
+curl -s -X POST http://127.0.0.1:8001/api/submit \
+  -F "issue_text=Please analyze the attached PDF complaint." \
+  -F "industry=banking" \
+  -F "llm_provider=groq" \
+  -F "files=@test_data/sample.pdf" | python -m json.tool
+```
 
-- `mcp_client/`: Web application frontend (HTML/CSS) and API routes.
-- `mcp_server/`: Core logic, MCP tools, and LLM clients.
-- `configs/`: YAML configuration files for different industries.
+### 6.4 Upload DOC / DOCX
 
-## Running Intake Triage MCP Server with Docker
-This guide instructions on how to build and run the Intelligent Intake and Triage MCP Server in a Docker container.
+```bash
+curl -s -X POST http://127.0.0.1:8001/api/submit \
+  -F "issue_text=Please analyze the attached Word document." \
+  -F "industry=banking" \
+  -F "llm_provider=groq" \
+  -F "files=@test_data/sample.doc" | python -m json.tool
+```
 
-## Prerequisites
+### 6.5 Upload Multiple Files
 
-- Docker
-- Docker Compose (optional, for easier management)
-- API Keys for Groq and/or Gemini
+```bash
+curl -s -X POST http://127.0.0.1:8001/api/submit \
+  -F "issue_text=Analyze all attachments and triage the case." \
+  -F "industry=banking" \
+  -F "llm_provider=groq" \
+  -F "files=@test_data/sample.pdf" \
+  -F "files=@test_data/Bill.webp" | python -m json.tool
+```
 
-## Quick Start with Docker Compose
+---
 
-1.  **Environment Setup**: Ensure your `.env` file exists in the project root containing your API keys.
+## 7) Supported Values
 
-    ```bash
-    cp mcp_server/.env.example .env
-    # Edit .env and add GROQ_API_KEY and GEMINI_API_KEY
-    ```
+### 7.1 Industries
 
-2.  **Build and Run**:
+- empty (auto-detect)
+- `banking`
+- `education`
+- `healthcare`
+- `it_services`
+- `logistics`
+- `restaurant`
+- `retail`
 
-    ```bash
-    docker-compose up --build
-    ```
+### 7.2 LLM Providers
 
-    > **Note:** If `docker-compose` is not found, try the modern command:
-    >
-    > ```bash
-    > docker compose up --build
-    > ```
+- `groq`
+- `gemini`
 
-    The MCP Server will start and listen on port **8000** for SSE connections.
+### 7.3 Supported File Types
 
-## Manual Docker Build & Run
+- `.pdf`
+- `.docx`, `.doc`
+- `.txt`
+- `.xlsx`, `.xls`
+- `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.bmp`
 
-### 1. Build the Image
+---
+
+## 8) Useful Commands
+
+### List test files
+
+```bash
+ls -l test_data
+```
+
+### Check client docs
+
+```bash
+curl -i http://127.0.0.1:8001/docs
+curl -i http://127.0.0.1:8001/openapi.json
+```
+
+---
+
+## 9) Quick Start Summary
+
+Terminal 1 (Backend):
 
 ```bash
 docker build -t intake-triage-server .
+docker run --rm -p 8000:8000 --env-file .env intake-triage-server
 ```
 
-### 2. Run the Container
-
-You can run the container with environment variables passed directly or via an env file.
+Terminal 2 (Frontend/UI Client):
 
 ```bash
-docker run -p 8000:8000 \
-  --env GROQ_API_KEY=your_key \
-  --env GEMINI_API_KEY=your_key \
-  intake-triage-server
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r mcp_client/requirements.txt
+pip install -r mcp_server/requirements.txt
+python -m uvicorn mcp_client.app:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-or
+Browser:
+
+- `http://127.0.0.1:8001/`
+
+MCP Server:
 
 ```bash
-docker run -p 8000:8000 --env-file .env intake-triage-server
+fastmcp run mcp_server/server.py --transport sse --port 8000
 ```
 
-## Configuration via Volume Mounts
-
-To modify industry configurations without rebuilding the image, mount your local `configs/` directory to `/configs` in the container.
-
-**Docker Run:**
+MCP Client:
 
 ```bash
-docker run -p 8000:8000 \
-  --env CONFIG_PATH=/configs \
-  -v $(pwd)/configs:/configs \
-  intake-triage-server
+python -m uvicorn mcp_client.app:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-**Docker Compose:**
-The provided `docker-compose.yml` already mounts `./configs` to `/configs` and sets `CONFIG_PATH`.
+---
 
-## Health Check
+## 10) LLM Models Used
 
-The container includes a health check running every 30 seconds. You can manually verify status:
+This project uses the following LLM models via API:
 
-```bash
-curl http://localhost:8000/
-```
+| Provider   | Use Case      | Model ID                                    | Parameters / Context     |
+| ---------- | ------------- | ------------------------------------------- | ------------------------ |
+| **Groq**   | Text Analysis | `llama-3.3-70b-versatile`                   | 70B params, 128K context |
+| **Groq**   | Vision/Images | `meta-llama/llama-4-scout-17b-16e-instruct` | 17B params, 128K context |
+| **Gemini** | Text Analysis | `gemini-2.5-flash`                          | ~1M input tokens         |
+| **Gemini** | Vision/Images | `gemini-2.5-flash`                          | ~1M input tokens         |
 
-
-## License
-
-MIT License
+> **Note:** Vision models are automatically selected when images are uploaded.

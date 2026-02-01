@@ -64,9 +64,6 @@ templates_dir = _client_dir / "templates"
 templates_dir.mkdir(exist_ok=True)
 templates = Jinja2Templates(directory=str(templates_dir))
 
-@app.get("/")
-def home():
-    return {"status": "OK", "message": "Server running"}
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
@@ -104,6 +101,7 @@ async def submit_intake(
         # Combine text from form and files
         combined_text = issue_text.strip()
         extracted_files = []
+        images = []  # Collect image data for multimodal processing
         
         # Extract text from uploaded files
         for file in files:
@@ -112,11 +110,27 @@ async def submit_intake(
                     content = await file.read()
                     extracted = extract_text_from_file(content, file.filename)
                     if extracted:
-                        extracted_files.append({
-                            "filename": file.filename,
-                            "text": extracted[:500] + "..." if len(extracted) > 500 else extracted
-                        })
-                        combined_text += f"\n\n[From {file.filename}]:\n{extracted}"
+                        # Check if it's an image (dict with is_image flag)
+                        if isinstance(extracted, dict) and extracted.get("is_image"):
+                            # Store image data for multimodal
+                            images.append({
+                                "base64_data": extracted["base64_data"],
+                                "mime_type": extracted["mime_type"],
+                                "filename": file.filename
+                            })
+                            text_content = extracted["text"]
+                            extracted_files.append({
+                                "filename": file.filename,
+                                "text": text_content[:500] + "..." if len(text_content) > 500 else text_content
+                            })
+                            combined_text += f"\n\n[From {file.filename}]:\n{text_content}"
+                        else:
+                            # Regular text extraction
+                            extracted_files.append({
+                                "filename": file.filename,
+                                "text": extracted[:500] + "..." if len(extracted) > 500 else extracted
+                            })
+                            combined_text += f"\n\n[From {file.filename}]:\n{extracted}"
                 except Exception as e:
                     logger.error(f"Failed to extract from {file.filename}: {e}")
                     extracted_files.append({
@@ -132,9 +146,8 @@ async def submit_intake(
             })
         
         # Process with MCP Server
-        # Process with MCP Server
         if MCP_SERVER_AVAILABLE:
-            result = process_with_mcp(combined_text, industry, llm_provider)
+            result = process_with_mcp(combined_text, industry, llm_provider, images)
         else:
             result = {
                 "error": "MCP Server not available",
@@ -160,6 +173,80 @@ async def submit_intake(
         })
 
 
+@app.post("/api/submit")
+async def submit_api(
+    issue_text: str = Form(""),
+    industry: Optional[str] = Form(None),
+    llm_provider: str = Form("groq"),
+    files: List[UploadFile] = File(default=[])
+):
+    """API endpoint to process submitted issue and files."""
+    try:
+        # Combine text from form and files
+        combined_text = issue_text.strip()
+        extracted_files = []
+        images = []  # Collect image data for multimodal processing
+        
+        # Extract text from uploaded files
+        for file in files:
+            if file.filename:
+                try:
+                    content = await file.read()
+                    extracted = extract_text_from_file(content, file.filename)
+                    if extracted:
+                        # Check if it's an image (dict with is_image flag)
+                        if isinstance(extracted, dict) and extracted.get("is_image"):
+                            # Store image data for multimodal
+                            images.append({
+                                "base64_data": extracted["base64_data"],
+                                "mime_type": extracted["mime_type"],
+                                "filename": file.filename
+                            })
+                            text_content = extracted["text"]
+                            extracted_files.append({
+                                "filename": file.filename,
+                                "text": text_content[:500] + "..." if len(text_content) > 500 else text_content
+                            })
+                            combined_text += f"\n\n[From {file.filename}]:\n{text_content}"
+                        else:
+                            # Regular text extraction
+                            extracted_files.append({
+                                "filename": file.filename,
+                                "text": extracted[:500] + "..." if len(extracted) > 500 else extracted
+                            })
+                            combined_text += f"\n\n[From {file.filename}]:\n{extracted}"
+                except Exception as e:
+                    logger.error(f"Failed to extract from {file.filename}: {e}")
+                    extracted_files.append({
+                        "filename": file.filename,
+                        "text": f"Error: {str(e)}"
+                    })
+        
+        if not combined_text.strip():
+            return JSONResponse({
+                "success": False,
+                "error": "Please provide an issue description or upload files."
+            }, status_code=400)
+        
+        # Process with MCP Server
+        if MCP_SERVER_AVAILABLE:
+            result = process_with_mcp(combined_text, industry, llm_provider, images)
+        else:
+            result = {
+                "success": False,
+                "error": "MCP Server not available",
+                "classification": None,
+                "severity": None,
+                "routing": None
+            }
+        
+        return JSONResponse(result)
+        
+    except Exception as e:
+        logger.error(f"API Submit error: {e}")
+        return JSONResponse({"success": False, "error": str(e)}, status_code=500)
+
+
 @app.get("/api/industries")
 async def get_industries():
     """Get list of available industries."""
@@ -174,11 +261,11 @@ async def get_industries():
         return JSONResponse({"industries": [], "error": str(e)})
 
 
-def process_with_mcp(text: str, industry: Optional[str] = None, llm_provider: str = "groq") -> dict:
+def process_with_mcp(text: str, industry: Optional[str] = None, llm_provider: str = "groq", images: Optional[List[dict]] = None) -> dict:
     """Process text through MCP Server pipeline."""
     try:
-        # Step 1: Classify
-        classification = classify_intake(text, industry, auto_detect_industry=True, llm_provider=llm_provider)
+        # Step 1: Classify (with images if available)
+        classification = classify_intake(text, industry, auto_detect_industry=True, llm_provider=llm_provider, images=images)
         detected_industry = classification.get('industry', 'banking')
         category_id = classification.get('category_id')
         

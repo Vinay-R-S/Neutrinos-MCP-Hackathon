@@ -3,7 +3,7 @@ Classify Intake Tool
 Provides the classify_intake MCP tool for categorizing intake requests.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import logging
 
 from ..config_loader import get_config_loader
@@ -24,10 +24,18 @@ def classify_intake(
     text: str,
     industry: Optional[str] = None,
     auto_detect_industry: bool = True,
-    llm_provider: str = "groq"
+    llm_provider: str = "groq",
+    images: Optional[List[Dict]] = None
 ) -> Dict[str, Any]:
     """
     Classify intake text into a category using LLM or keyword matching.
+    
+    Args:
+        text: The intake text to classify
+        industry: Optional industry context
+        auto_detect_industry: Whether to auto-detect industry from text
+        llm_provider: LLM provider to use ("groq" or "gemini")
+        images: Optional list of image dicts with base64_data, mime_type, filename
     """
     if not text or not text.strip():
         raise ValueError("Intake text cannot be empty")
@@ -58,8 +66,8 @@ def classify_intake(
         config = config_loader.load_config(industry)
         categories = config.get('categories', [])
 
-    # Classify the text
-    classification = llm_client.classify_text(text, categories, industry)
+    # Classify the text (pass images if available)
+    classification = llm_client.classify_text(text, categories, industry, images=images)
 
     # Get sampling thresholds
     thresholds = config_loader.get_sampling_thresholds(industry)

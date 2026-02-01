@@ -118,11 +118,28 @@ def extract_from_excel(content: bytes) -> str:
         return f"[Excel extraction error: {str(e)}]"
 
 
-def extract_from_image(content: bytes, filename: str) -> str:
+def extract_from_image(content: bytes, filename: str) -> dict:
     """
     Extract information from image file.
-    Uses Pillow for image metadata and basic description.
+    Returns dict with text description, base64 data, and mime type for multimodal LLM.
     """
+    import base64
+    
+    # Determine mime type from extension
+    ext = Path(filename).suffix.lower()
+    mime_types = {
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.gif': 'image/gif',
+        '.bmp': 'image/bmp',
+        '.webp': 'image/webp'
+    }
+    mime_type = mime_types.get(ext, 'image/jpeg')
+    
+    # Encode to base64
+    base64_data = base64.b64encode(content).decode('utf-8')
+    
     try:
         from PIL import Image
         import io
@@ -146,12 +163,28 @@ def extract_from_image(content: bytes, filename: str) -> str:
             if exif:
                 description += "Contains EXIF metadata\n"
         
-        description += "\n[Image uploaded - visual content will be analyzed by the system]"
+        description += "\n[Image uploaded - will be analyzed by vision model]"
         
-        return description
+        return {
+            "text": description,
+            "base64_data": base64_data,
+            "mime_type": mime_type,
+            "is_image": True
+        }
         
     except ImportError:
-        return f"[Image {filename}: Pillow package required for image processing]"
+        return {
+            "text": f"[Image {filename}: Pillow package required for image processing]",
+            "base64_data": base64_data,
+            "mime_type": mime_type,
+            "is_image": True
+        }
     except Exception as e:
-        return f"[Image {filename}: {str(e)}]"
+        return {
+            "text": f"[Image {filename}: {str(e)}]",
+            "base64_data": base64_data,
+            "mime_type": mime_type,
+            "is_image": True
+        }
+
 

@@ -16,6 +16,10 @@ from dotenv import load_dotenv
 
 # Load environment variables from mcp_server/.env
 _server_dir = Path(__file__).parent
+import sys
+# Add project root to sys.path to allow imports from mcp_server package
+sys.path.insert(0, str(_server_dir.parent))
+
 _env_path = _server_dir / ".env"
 if _env_path.exists():
     load_dotenv(_env_path)

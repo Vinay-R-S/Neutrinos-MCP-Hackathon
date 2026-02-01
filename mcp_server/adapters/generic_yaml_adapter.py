@@ -637,22 +637,22 @@ class GenericYAMLAdapter:
         )
         
         prompt = f"""Analyze this configuration structure and map each key to one of these expected keys:
-- industry (domain/sector identifier)
-- categories (list of classification categories)
-- severity_rules (priority/urgency levels)
-- routing_rules (team/queue assignments)
-- risk_flags (warning indicators)
-- sampling_thresholds (confidence settings)
+        - industry (domain/sector identifier)
+        - categories (list of classification categories)
+        - severity_rules (priority/urgency levels)
+        - routing_rules (team/queue assignments)
+        - risk_flags (warning indicators)
+        - sampling_thresholds (confidence settings)
 
-Configuration structure:
-{config_structure}
+        Configuration structure:
+        {config_structure}
 
-Sample of first category if available:
-{json.dumps(config.get(list(config.keys())[0]) if config else {}, indent=2)[:500]}
+        Sample of first category if available:
+        {json.dumps(config.get(list(config.keys())[0]) if config else {}, indent=2)[:500]}
 
-Respond with a JSON object mapping source keys to target keys.
-Example: {{"complaint_types": "categories", "priority_levels": "severity_rules"}}
-Only include keys that clearly map to one of the expected keys."""
+        Respond with a JSON object mapping source keys to target keys.
+        Example: {{"complaint_types": "categories", "priority_levels": "severity_rules"}}
+        Only include keys that clearly map to one of the expected keys."""
 
         try:
             client = llm._get_client()

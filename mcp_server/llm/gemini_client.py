@@ -60,10 +60,17 @@ class GeminiClient:
         self,
         text: str,
         categories: List[Dict[str, Any]],
-        industry: str
+        industry: str,
+        images: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, Any]:
         """
         Classify intake text into a category using LLM.
+        
+        Args:
+            text: The intake text to classify
+            categories: List of category definitions from config
+            industry: The industry context
+            images: Optional list of image dicts with base64_data, mime_type, filename
         """
         if not self.api_key:
             return self._fallback_classify(text, categories)
@@ -75,31 +82,67 @@ class GeminiClient:
         ])
 
         prompt = f"""You are an expert intake classifier for the {industry} industry.
-Analyze the following intake text and classify it into one of the categories below.
+        Analyze the following intake text and classify it into one of the categories below.
 
-CATEGORIES:
-{category_list}
+        CATEGORIES:
+        {category_list}
 
-INTAKE TEXT:
-{text}
+        INTAKE TEXT:
+        {text}
 
-Respond ONLY with a valid JSON object in this exact format:
-{{
-    "category_id": "the matching category id",
-    "category_name": "the category name",
-    "confidence": 0.95,
-    "subcategory": "optional subcategory if applicable",
-    "explanation": "brief explanation of why this category was chosen"
-}}
+        Respond ONLY with a valid JSON object in this exact format:
+        {{
+            "category_id": "the matching category id",
+            "category_name": "the category name",
+            "confidence": 0.95,
+            "subcategory": "optional subcategory if applicable",
+            "explanation": "brief explanation of why this category was chosen"
+        }}
 
-Important:
-- confidence should be a number between 0 and 1
-- Choose the most specific and accurate category
-- If multiple categories could apply, choose the primary one"""
+        Important:
+        - confidence should be a number between 0 and 1
+        - Choose the most specific and accurate category
+        - If multiple categories could apply, choose the primary one"""
+
+        # Add image analysis instruction if images are present
+        if images:
+            prompt += "\n- Also analyze any images provided and incorporate their content into your classification decision."
 
         try:
-            model = self._get_client()
-            response = model.generate_content(prompt)
+            # Determine model - use vision-capable model if images present
+            model_to_use = self.model
+            if images:
+                model_to_use = "gemini-2.5-flash"
+            
+            # Re-initialize model if different from default
+            if model_to_use != self.model:
+                import google.generativeai as genai
+                model = genai.GenerativeModel(model_to_use)
+            else:
+                model = self._get_client()
+            
+            # Build content for request
+            if images:
+                # Multimodal request with images
+                from PIL import Image
+                import io
+                import base64
+                
+                content = [prompt]
+                for img in images[:5]:  # Limit to 5 images
+                    try:
+                        # Decode base64 and create PIL Image
+                        img_bytes = base64.b64decode(img['base64_data'])
+                        pil_image = Image.open(io.BytesIO(img_bytes))
+                        content.append(pil_image)
+                    except Exception as e:
+                        logger.warning(f"Failed to process image: {e}")
+                
+                response = model.generate_content(content)
+            else:
+                # Text-only request
+                response = model.generate_content(prompt)
+            
             result_text = response.text.strip()
             
             # Parse JSON response
@@ -110,6 +153,10 @@ Important:
                 result_text = result_text.strip()
 
             result = json.loads(result_text)
+            
+            # Add model info to result
+            result["model_used"] = model_to_use
+            
             return result
 
         except Exception as e:
@@ -142,31 +189,31 @@ Important:
         ])
 
         prompt = f"""You are an expert severity analyst for the {industry} industry.
-Analyze the following intake text that has been classified as "{category}".
+        Analyze the following intake text that has been classified as "{category}".
 
-SEVERITY LEVELS:
-{severity_desc}
+        SEVERITY LEVELS:
+        {severity_desc}
 
-RISK FLAG CATEGORIES:
-{risk_desc}
+        RISK FLAG CATEGORIES:
+        {risk_desc}
 
-INTAKE TEXT:
-{text}
+        INTAKE TEXT:
+        {text}
 
-Respond ONLY with a valid JSON object in this exact format:
-{{
-    "severity_score": 3,
-    "severity_level": "medium",
-    "priority": "normal",
-    "risk_flags_found": ["list", "of", "matching", "risk", "flag", "types"],
-    "urgency_indicators": ["specific", "urgent", "phrases", "found"],
-    "explanation": "brief explanation of severity assessment"
-}}
+        Respond ONLY with a valid JSON object in this exact format:
+        {{
+            "severity_score": 3,
+            "severity_level": "medium",
+            "priority": "normal",
+            "risk_flags_found": ["list", "of", "matching", "risk", "flag", "types"],
+            "urgency_indicators": ["specific", "urgent", "phrases", "found"],
+            "explanation": "brief explanation of severity assessment"
+        }}
 
-Important:
-- severity_score should be 1-5 (1=minimal, 5=critical)
-- priority should be: "low", "normal", "high", or "urgent"
-- List all applicable risk flag types that match"""
+        Important:
+        - severity_score should be 1-5 (1=minimal, 5=critical)
+        - priority should be: "low", "normal", "high", or "urgent"
+        - List all applicable risk flag types that match"""
 
         try:
             model = self._get_client()
@@ -196,23 +243,23 @@ Important:
         industry_list = ", ".join(available_industries)
 
         prompt = f"""You are an expert at classifying customer inquiries into industry categories.
-Analyze the following text and determine which industry it belongs to.
+        Analyze the following text and determine which industry it belongs to.
 
-AVAILABLE INDUSTRIES: {industry_list}
+        AVAILABLE INDUSTRIES: {industry_list}
 
-TEXT:
-{text}
+        TEXT:
+        {text}
 
-Respond ONLY with a valid JSON object in this exact format:
-{{
-    "industry": "the matching industry name",
-    "confidence": 0.95,
-    "explanation": "brief explanation of why this industry was chosen"
-}}
+        Respond ONLY with a valid JSON object in this exact format:
+        {{
+            "industry": "the matching industry name",
+            "confidence": 0.95,
+            "explanation": "brief explanation of why this industry was chosen"
+        }}
 
-Important:
-- industry must be one of the available industries listed above
-- confidence should be a number between 0 and 1"""
+        Important:
+        - industry must be one of the available industries listed above
+        - confidence should be a number between 0 and 1"""
 
         try:
             model = self._get_client()

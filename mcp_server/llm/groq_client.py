@@ -58,7 +58,8 @@ class GroqClient:
         self,
         text: str,
         categories: List[Dict[str, Any]],
-        industry: str
+        industry: str,
+        images: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, Any]:
         """
         Classify intake text into a category using LLM.
@@ -67,6 +68,7 @@ class GroqClient:
             text: The intake text to classify
             categories: List of category definitions from config
             industry: The industry context
+            images: Optional list of image dicts with base64_data, mime_type, filename
 
         Returns:
             Classification result with category, confidence, and explanation
@@ -81,36 +83,62 @@ class GroqClient:
         ])
 
         prompt = f"""You are an expert intake classifier for the {industry} industry.
-Analyze the following intake text and classify it into one of the categories below.
+        Analyze the following intake text and classify it into one of the categories below.
 
-CATEGORIES:
-{category_list}
+        CATEGORIES:
+        {category_list}
 
-INTAKE TEXT:
-{text}
+        INTAKE TEXT:
+        {text}
 
-Respond ONLY with a valid JSON object in this exact format:
-{{
-    "category_id": "the matching category id",
-    "category_name": "the category name",
-    "confidence": 0.95,
-    "subcategory": "optional subcategory if applicable",
-    "explanation": "brief explanation of why this category was chosen"
-}}
+        Respond ONLY with a valid JSON object in this exact format:
+        {{
+            "category_id": "the matching category id",
+            "category_name": "the category name",
+            "confidence": 0.95,
+            "subcategory": "optional subcategory if applicable",
+            "explanation": "brief explanation of why this category was chosen"
+        }}
 
-Important:
-- confidence should be a number between 0 and 1
-- Choose the most specific and accurate category
-- If multiple categories could apply, choose the primary one"""
+        Important:
+        - confidence should be a number between 0 and 1
+        - Choose the most specific and accurate category
+        - If multiple categories could apply, choose the primary one"""
+
+        # Add image analysis instruction if images are present
+        if images:
+            prompt += "\n- Also analyze any images provided and incorporate their content into your classification decision."
 
         try:
             client = self._get_client()
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[
+            
+            # Determine model - use vision model if images present
+            model_to_use = self.model
+            if images:
+                model_to_use = "meta-llama/llama-4-scout-17b-16e-instruct"
+            
+            # Build message content
+            if images:
+                # Multimodal message with images
+                content = [{"type": "text", "text": prompt}]
+                for img in images[:5]:  # Max 5 images per Groq docs
+                    content.append({
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:{img['mime_type']};base64,{img['base64_data']}"
+                        }
+                    })
+                messages = [{"role": "user", "content": content}]
+            else:
+                # Text-only message
+                messages = [
                     {"role": "system", "content": "You are a precise classification assistant. Always respond with valid JSON only, no additional text."},
                     {"role": "user", "content": prompt}
-                ],
+                ]
+            
+            response = client.chat.completions.create(
+                model=model_to_use,
+                messages=messages,
                 temperature=0.1,
                 max_tokens=500
             )
@@ -126,6 +154,10 @@ Important:
                 result_text = result_text.strip()
 
             result = json.loads(result_text)
+            
+            # Add model info to result
+            result["model_used"] = model_to_use
+            
             return result
 
         except json.JSONDecodeError as e:
@@ -173,31 +205,31 @@ Important:
         ])
 
         prompt = f"""You are an expert severity analyst for the {industry} industry.
-Analyze the following intake text that has been classified as "{category}".
+        Analyze the following intake text that has been classified as "{category}".
 
-SEVERITY LEVELS:
-{severity_desc}
+        SEVERITY LEVELS:
+        {severity_desc}
 
-RISK FLAG CATEGORIES:
-{risk_desc}
+        RISK FLAG CATEGORIES:
+        {risk_desc}
 
-INTAKE TEXT:
-{text}
+        INTAKE TEXT:
+        {text}
 
-Respond ONLY with a valid JSON object in this exact format:
-{{
-    "severity_score": 3,
-    "severity_level": "medium",
-    "priority": "normal",
-    "risk_flags_found": ["list", "of", "matching", "risk", "flag", "types"],
-    "urgency_indicators": ["specific", "urgent", "phrases", "found"],
-    "explanation": "brief explanation of severity assessment"
-}}
+        Respond ONLY with a valid JSON object in this exact format:
+        {{
+            "severity_score": 3,
+            "severity_level": "medium",
+            "priority": "normal",
+            "risk_flags_found": ["list", "of", "matching", "risk", "flag", "types"],
+            "urgency_indicators": ["specific", "urgent", "phrases", "found"],
+            "explanation": "brief explanation of severity assessment"
+        }}
 
-Important:
-- severity_score should be 1-5 (1=minimal, 5=critical)
-- priority should be: "low", "normal", "high", or "urgent"
-- List all applicable risk flag types that match"""
+        Important:
+        - severity_score should be 1-5 (1=minimal, 5=critical)
+        - priority should be: "low", "normal", "high", or "urgent"
+        - List all applicable risk flag types that match"""
 
         try:
             client = self._get_client()
@@ -247,23 +279,23 @@ Important:
         industry_list = ", ".join(available_industries)
 
         prompt = f"""You are an expert at classifying customer inquiries into industry categories.
-Analyze the following text and determine which industry it belongs to.
+        Analyze the following text and determine which industry it belongs to.
 
-AVAILABLE INDUSTRIES: {industry_list}
+        AVAILABLE INDUSTRIES: {industry_list}
 
-TEXT:
-{text}
+        TEXT:
+        {text}
 
-Respond ONLY with a valid JSON object in this exact format:
-{{
-    "industry": "the matching industry name",
-    "confidence": 0.95,
-    "explanation": "brief explanation of why this industry was chosen"
-}}
+        Respond ONLY with a valid JSON object in this exact format:
+        {{
+            "industry": "the matching industry name",
+            "confidence": 0.95,
+            "explanation": "brief explanation of why this industry was chosen"
+        }}
 
-Important:
-- industry must be one of the available industries listed above
-- confidence should be a number between 0 and 1"""
+        Important:
+        - industry must be one of the available industries listed above
+        - confidence should be a number between 0 and 1"""
 
         try:
             client = self._get_client()
