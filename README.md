@@ -217,6 +217,36 @@ curl -s -X POST http://127.0.0.1:8001/api/submit \
 
 ---
 
+## 6.1) Windows PowerShell Commands
+
+The above curl commands use Linux-style line continuation (`\`). For **Windows PowerShell**, use `curl.exe` (not `curl`, which is an alias for `Invoke-WebRequest`):
+
+### Submit Text Only (PowerShell)
+
+```powershell
+curl.exe -s -X POST http://127.0.0.1:8001/api/submit -H "Content-Type: application/x-www-form-urlencoded" --data-urlencode "issue_text=My banking app got hacked and money was withdrawn" --data-urlencode "industry=banking" --data-urlencode "llm_provider=groq" | python -m json.tool
+```
+
+### Upload Image (PowerShell)
+
+```powershell
+curl.exe -s -X POST http://127.0.0.1:8001/api/submit -F "issue_text=Please analyze this screenshot." -F "industry=banking" -F "llm_provider=groq" -F "files=@test_data/Bill.webp" | python -m json.tool
+```
+
+### Upload PDF (PowerShell)
+
+```powershell
+curl.exe -s -X POST http://127.0.0.1:8001/api/submit -F "issue_text=Please analyze the attached PDF complaint." -F "industry=banking" -F "llm_provider=groq" -F "files=@test_data/sample.pdf" | python -m json.tool
+```
+
+### Upload Multiple Files (PowerShell)
+
+```powershell
+curl.exe -s -X POST http://127.0.0.1:8001/api/submit -F "issue_text=Analyze all attachments and triage the case." -F "industry=banking" -F "llm_provider=groq" -F "files=@test_data/sample.pdf" -F "files=@test_data/Bill.webp" | python -m json.tool
+```
+
+---
+
 ## 7) Supported Values
 
 ### 7.1 Industries
