@@ -9,14 +9,10 @@ This README provides two ways to run the project:
 
 Docker is required for the MCP backend server.
 
----
-
 ## 1) Requirements
 
 - Python 3.11+
 - Docker
-
----
 
 ## 2) Environment Setup
 
@@ -38,8 +34,6 @@ DEFAULT_INDUSTRY=banking
 LOG_LEVEL=INFO
 ```
 
----
-
 ## 3) Backend (MCP Server) - Docker
 
 ### 3.1 Build Backend Image
@@ -59,8 +53,6 @@ docker run --rm -p 8000:8000 --env-file .env intake-triage-server
 ```bash
 curl -i http://127.0.0.1:8000/sse
 ```
-
----
 
 ## 4) Frontend (UI Client) - Browser Mode
 
@@ -106,8 +98,6 @@ python -m uvicorn mcp_client.app:app --host 0.0.0.0 --port 8001 --reload
   - Forward/expose port `8001`
   - Open the generated public URL in your browser
 
----
-
 ## 5) Windows Setup (No Docker)
 
 If you are on Windows and want to run without Docker, use the provided batch scripts.
@@ -138,8 +128,6 @@ run_client.bat
 
 The client will automatically open `http://127.0.0.1:8001/` in your browser.
 
----
-
 ## 5) UI Mode Usage (Browser)
 
 1. Open: `http://127.0.0.1:8001/`
@@ -155,8 +143,6 @@ The result page will show:
 - severity
 - routing decision
 - SLA and escalation path
-
----
 
 ## 6) Terminal Mode Usage (JSON)
 
@@ -215,8 +201,6 @@ curl -s -X POST http://127.0.0.1:8001/api/submit \
   -F "files=@test_data/Bill.webp" | python -m json.tool
 ```
 
----
-
 ## 6.1) Windows PowerShell Commands
 
 The above curl commands use Linux-style line continuation (`\`). For **Windows PowerShell**, use `curl.exe` (not `curl`, which is an alias for `Invoke-WebRequest`):
@@ -245,8 +229,6 @@ curl.exe -s -X POST http://127.0.0.1:8001/api/submit -F "issue_text=Please analy
 curl.exe -s -X POST http://127.0.0.1:8001/api/submit -F "issue_text=Analyze all attachments and triage the case." -F "industry=banking" -F "llm_provider=groq" -F "files=@test_data/sample.pdf" -F "files=@test_data/Bill.webp" | python -m json.tool
 ```
 
----
-
 ## 7) Supported Values
 
 ### 7.1 Industries
@@ -273,8 +255,6 @@ curl.exe -s -X POST http://127.0.0.1:8001/api/submit -F "issue_text=Analyze all 
 - `.xlsx`, `.xls`
 - `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.bmp`
 
----
-
 ## 8) Useful Commands
 
 ### List test files
@@ -289,8 +269,6 @@ ls -l test_data
 curl -i http://127.0.0.1:8001/docs
 curl -i http://127.0.0.1:8001/openapi.json
 ```
-
----
 
 ## 9) Quick Start Summary
 
@@ -326,8 +304,6 @@ MCP Client:
 ```bash
 python -m uvicorn mcp_client.app:app --host 0.0.0.0 --port 8001 --reload
 ```
-
----
 
 ## 10) LLM Models Used
 
